@@ -1,0 +1,39 @@
+:root {
+    --blue-400: #26ACFF;
+    --mint-500: #00C3B2;
+    --emerald-500: #05D686;
+    --animate-period: 5s;
+}
+
+.animate-gradient {
+    background: linear-gradient(
+            60deg,
+            var(--blue-400) 0%,
+            var(--mint-500) 15%,
+            var(--emerald-500) 30%,
+            var(--blue-400) 45%,
+            var(--mint-500) 60%,
+            var(--emerald-500) 75%,
+            var(--blue-400) 100%
+    );
+    background-size: 800% 100%;
+    -webkit-animation: movingGradient var(--animate-period) linear infinite;
+    -moz-animation: movingGradient var(--animate-period) linear infinite;
+    animation: movingGradient var(--animate-period) linear infinite;
+}
+
+@keyframes movingGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+.text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
+}
