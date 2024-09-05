@@ -37,3 +37,32 @@
     -webkit-text-fill-color: transparent;
     text-fill-color: transparent;
 }
+
+.gradient-border {
+    border: 4px solid transparent;
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+    background-image:
+            linear-gradient(to right, #ffffff, #ffffff),
+            linear-gradient(
+                    60deg,
+                    var(--blue-400) 0%,
+                    var(--mint-500) 15%,
+                    var(--emerald-500) 30%,
+                    var(--blue-400) 45%,
+                    var(--mint-500) 60%,
+                    var(--emerald-500) 75%,
+                    var(--blue-400) 100%
+            );
+    background-size: 100% 100%, 800% 100%;
+    animation: movingGradient var(--animate-period) linear infinite;
+}
+
+.no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
