@@ -1,6 +1,7 @@
 import React from 'react';
 import './styles.css';
 import WelcomeMessage from "@components/Chat/WelcomeMessage.tsx";
+import SampleTemplateSection from "@components/Chat/SampleTemplateSection.tsx";
 
 interface WelcomePanelProps {
     nickname: string
@@ -8,7 +9,10 @@ interface WelcomePanelProps {
 
 function WelcomePanel({ nickname }: WelcomePanelProps): JSX.Element {
     return (
-        <WelcomeMessage nickname={nickname} />
+        <div>
+            <WelcomeMessage nickname={nickname} />
+            <SampleTemplateSection />
+        </div>
     );
 }
 

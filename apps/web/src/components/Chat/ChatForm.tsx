@@ -23,10 +23,10 @@ function ChatForm({ onSubmit }: ChatFormProps): JSX.Element {
     }
 
     return (
-        <div className="w-3/4 p-1 rounded-2xl gradient-border">
+        <div className="w-full p-1 rounded-2xl gradient-border">
             <form className="flex items-center bg-white rounded-2xl" onSubmit={handleSubmit}>
                 <textarea
-                    className="flex-grow p-4 text-xl resize-none outline-none rounded-l-2xl overflow-hidden"
+                    className="flex-grow p-4 text-lg font-light resize-none outline-none rounded-l-2xl overflow-hidden"
                     onChange={handleChangeText}
                     placeholder="질문을 통해 대화를 시작할 수 있어요"
                     rows={2}
@@ -42,6 +42,7 @@ function ChatForm({ onSubmit }: ChatFormProps): JSX.Element {
                     type="submit"
                 >
                     <Image
+                        className="hover-grow w-3/4 h-auto"
                         alt="Submit"
                         height={75}
                         src="/submit_icon.svg"

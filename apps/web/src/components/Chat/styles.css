@@ -3,10 +3,8 @@
     --mint-500: #00C3B2;
     --emerald-500: #05D686;
     --animate-period: 5s;
-}
 
-.animate-gradient {
-    background: linear-gradient(
+    --gradient-background: linear-gradient(
             60deg,
             var(--blue-400) 0%,
             var(--mint-500) 15%,
@@ -16,6 +14,10 @@
             var(--emerald-500) 75%,
             var(--blue-400) 100%
     );
+}
+
+.animate-gradient {
+    background: var(--gradient-background);
     background-size: 800% 100%;
     -webkit-animation: movingGradient var(--animate-period) linear infinite;
     -moz-animation: movingGradient var(--animate-period) linear infinite;
@@ -44,16 +46,7 @@
     background-origin: padding-box, border-box;
     background-image:
             linear-gradient(to right, #ffffff, #ffffff),
-            linear-gradient(
-                    60deg,
-                    var(--blue-400) 0%,
-                    var(--mint-500) 15%,
-                    var(--emerald-500) 30%,
-                    var(--blue-400) 45%,
-                    var(--mint-500) 60%,
-                    var(--emerald-500) 75%,
-                    var(--blue-400) 100%
-            );
+            var(--gradient-background);
     background-size: 100% 100%, 800% 100%;
     animation: movingGradient var(--animate-period) linear infinite;
 }

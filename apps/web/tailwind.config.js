@@ -61,8 +61,35 @@ module.exports = {
           '950': '#353635',
         }
       },
+      scale: {
+        "100": "1.0",
+        "110": "1.1",
+        "120": "1.2",
+      },
+      transitionProperty: {
+        'size': 'transform',
+      },
+      transitionTimingFunction: {
+        'in-out': 'ease-in-out',
+      },
+      transitionDuration: {
+        '200': '200ms',
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.hover-grow': {
+          transition: 'transform 200ms ease-in-out',
+          '&:hover': {
+            transform: 'scale(1.1)',
+          },
+        },
+      };
+
+      addUtilities(newUtilities);
+    },
+  ],
 }
 
