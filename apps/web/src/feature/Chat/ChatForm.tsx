@@ -3,7 +3,7 @@ import type {ChangeEvent, KeyboardEventHandler} from "react";
 import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {useStageStore} from "@/feature/store/stageStore.tsx";
-import {ChatInterface} from "@repo/types/dist";
+import {ChatInterface} from "@repo/types/src";
 
 interface ChatFormProps {
   templateText: string;

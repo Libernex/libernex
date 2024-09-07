@@ -5,6 +5,7 @@ import useTemplatePrompt from "@/feature/hooks/useTemplatePrompt.tsx";
 import {useStageStore} from "@/feature/store/stageStore.tsx";
 import ChatHistory from "@/feature/Chat/ChatHistory.tsx";
 import useChatHistory from "@/feature/hooks/useChatHistory.tsx";
+import ChatRoomList from "@/feature/Chat/ChatRoomList.tsx";
 
 function ChatContainer(): JSX.Element {
   const { templateText, setTemplateText } = useTemplatePrompt();
@@ -14,11 +15,14 @@ function ChatContainer(): JSX.Element {
   const nickname: string = "Lyght";
 
   return (
-    <div className="h-screen flex pt-16">
-      <aside className="hidden md:block w-56 bg-emerald-400 shrink-0">
-        사이드바
+    <div className="h-screen flex">
+      <aside className="hidden md:block w-56 shrink-0 border-r-2 border-gray-200  pt-16">
+        <div className="flex justify-center">
+          <img className="w-3/4 h-auto" src="L-LX-Logo.svg" />
+        </div>
+        <ChatRoomList />
       </aside>
-      <div className="flex-1 flex justify-center">
+      <div className="flex-1 flex justify-center pt-16">
         <main className="container mx-auto max-w-screen-md flex flex-col  px-4 h-full">
           <div className="flex-grow overflow-y-auto mb-4">
             {stage === "welcome" ? (
