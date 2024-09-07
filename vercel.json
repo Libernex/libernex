@@ -22,5 +22,7 @@
         "distDir": "dist"
       }
     }
-  ]
+  ],
+  "installCommand": "pnpm install",
+  "buildCommand": "turbo run build"
 }
