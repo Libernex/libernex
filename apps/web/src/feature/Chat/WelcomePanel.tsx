@@ -8,11 +8,14 @@ interface WelcomePanelProps {
   setTemplateText: (text: string) => void;
 }
 
-function WelcomePanel({ nickname, setTemplateText }: WelcomePanelProps): JSX.Element {
+function WelcomePanel({
+  nickname,
+  setTemplateText,
+}: WelcomePanelProps): JSX.Element {
   return (
     <div>
       <WelcomeMessage nickname={nickname} />
-      <SampleTemplateSection setTemplateText={setTemplateText}/>
+      <SampleTemplateSection setTemplateText={setTemplateText} />
     </div>
   );
 }

@@ -1,7 +1,8 @@
 "use client";
-import type {ChangeEvent} from "react";
-import {useEffect, useState} from "react";
+import type {ChangeEvent, KeyboardEventHandler} from "react";
+import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
+import {useStageStore} from "@/feature/store/stageStore.tsx";
 
 interface ChatFormProps {
   onSubmit: (message: string) => void;
@@ -15,12 +16,24 @@ function ChatForm({
   setTemplateText,
 }: ChatFormProps): JSX.Element {
   const [message, setMessage] = useState<string>("");
+  const { stage, setStage } = useStageStore();
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     if (message.trim()) {
       onSubmit(message);
       setMessage("");
+    }
+    if (stage == "welcome") {
+      setStage("chatting");
+    }
+  };
+
+  const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as unknown as React.FormEvent);
     }
   };
 
@@ -32,6 +45,9 @@ function ChatForm({
     if (templateText.trim() !== "") {
       setMessage(templateText);
       setTemplateText("");
+      if (textAreaRef.current) {
+        textAreaRef.current.focus();
+      }
     }
   }, [templateText]);
 
@@ -42,8 +58,10 @@ function ChatForm({
         onSubmit={handleSubmit}
       >
         <textarea
+          ref={textAreaRef}
           className="flex-grow p-4 text-lg font-light resize-none outline-none rounded-l-2xl overflow-hidden"
           onChange={handleChangeText}
+          onKeyDown={handleKeyDown}
           placeholder="질문을 통해 대화를 시작할 수 있어요"
           rows={2}
           style={{
