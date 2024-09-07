@@ -13,7 +13,7 @@ function WelcomePanel({
   setTemplateText,
 }: WelcomePanelProps): JSX.Element {
   return (
-    <div>
+    <div style={{ overflowX: "hidden" }}>
       <WelcomeMessage nickname={nickname} />
       <SampleTemplateSection setTemplateText={setTemplateText} />
     </div>

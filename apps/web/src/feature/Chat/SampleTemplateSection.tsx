@@ -35,19 +35,10 @@ function Card({
 }): JSX.Element {
   return (
     <div className="flex flex-col my-2 group" onClick={onClick}>
-      <div className="w-40 h-40 relative">
-        <div
-          className="absolute inset-0"
-          style={{
-            filter: "drop-shadow(30px 30px 100px rgba(16, 45, 97, 0.16))",
-          }}
-        >
-          <img
-            src={src}
-            className="w-full h-full object-contain group-hover:hover-grow"
-          />
-        </div>
-      </div>
+      <img
+        src={src}
+        className="w-36 h-36 group-hover:hover-grow drop-shadow-xl"
+      />
       <span className="text-xl font-bold mb-2">{title}</span>
       <span className="w-40 text-sm" style={{ wordBreak: "keep-all" }}>
         {description}

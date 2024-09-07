@@ -1,6 +1,7 @@
-import express, { type Express, json, urlencoded } from "express";
+import express, {type Express, json, urlencoded} from "express";
 import morgan from "morgan";
 import cors from "cors";
+import ChatRoute from "./chat.route";
 
 export const createServer = (): Express => {
   const app = express();
@@ -14,5 +15,11 @@ export const createServer = (): Express => {
   app.get("/status", (_, res) => {
     return res.json({ ok: true });
   });
+
+  addRoutes(app);
   return app;
+};
+
+const addRoutes = (app: Express) => {
+  app.use(ChatRoute);
 };

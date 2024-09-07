@@ -3,31 +3,43 @@ import type {ChangeEvent, KeyboardEventHandler} from "react";
 import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {useStageStore} from "@/feature/store/stageStore.tsx";
+import {ChatInterface} from "@repo/types/dist";
 
 interface ChatFormProps {
-  onSubmit: (message: string) => void;
   templateText: string;
   setTemplateText: (text: string) => void;
+  sendQuestion: (chat: ChatInterface) => void;
 }
 
 function ChatForm({
-  onSubmit,
   templateText,
   setTemplateText,
+  sendQuestion,
 }: ChatFormProps): JSX.Element {
   const [message, setMessage] = useState<string>("");
   const { stage, setStage } = useStageStore();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = (e: React.FormEvent): void => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    if (message.trim()) {
-      onSubmit(message);
-      setMessage("");
-    }
+    if (message.trim() === "") return;
+
+    const question: ChatInterface = {
+      id: window.crypto.randomUUID(),
+      sender: {
+        nickname: "lyght",
+        avatarSrc: "Star-Avatar.webp",
+      },
+      sentAt: new Date().toLocaleString(),
+      message: message,
+    };
+
+    setMessage("");
     if (stage == "welcome") {
       setStage("chatting");
     }
+
+    await sendQuestion(question);
   };
 
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
@@ -79,7 +91,7 @@ function ChatForm({
             className="hover-grow w-3/4 h-auto"
             alt="Submit"
             height={75}
-            src="/submit_icon.svg"
+            src="Submit-Arrow.svg"
             width={75}
           />
         </button>

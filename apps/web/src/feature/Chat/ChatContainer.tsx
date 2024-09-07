@@ -3,15 +3,15 @@ import WelcomePanel from "@/feature/Chat/WelcomePanel.tsx";
 import ChatForm from "@/feature/Chat/ChatForm.tsx";
 import useTemplatePrompt from "@/feature/hooks/useTemplatePrompt.tsx";
 import {useStageStore} from "@/feature/store/stageStore.tsx";
+import ChatHistory from "@/feature/Chat/ChatHistory.tsx";
+import useChatHistory from "@/feature/hooks/useChatHistory.tsx";
 
 function ChatContainer(): JSX.Element {
   const { templateText, setTemplateText } = useTemplatePrompt();
   const { stage } = useStageStore();
+  const { chatHistory, sendQuestion } = useChatHistory();
 
   const nickname: string = "Lyght";
-  const handleSubmit = (message: string): void => {
-    console.log("submit!");
-  };
 
   return (
     <div className="h-screen flex pt-16">
@@ -19,7 +19,7 @@ function ChatContainer(): JSX.Element {
         사이드바
       </aside>
       <div className="flex-1 flex justify-center">
-        <main className="container flex flex-col max-w-screen-md mx-auto px-4 h-full">
+        <main className="container mx-auto max-w-screen-md flex flex-col  px-4 h-full">
           <div className="flex-grow overflow-y-auto mb-4">
             {stage === "welcome" ? (
               <WelcomePanel
@@ -28,21 +28,15 @@ function ChatContainer(): JSX.Element {
               />
             ) : (
               <div>
-                <div className="h-72 bg-blue-400"></div>
-                <div className="h-72 bg-blue-400"></div>
-                <div className="h-72 bg-blue-400"></div>
-                <div className="h-72 bg-blue-400"></div>
-                <div className="h-72 bg-blue-400"></div>
-                <div className="h-72 bg-blue-400"></div>
-                <div className="h-72 bg-blue-400"></div>
+                <ChatHistory chatHistories={chatHistory} />
               </div>
             )}
           </div>
           <div className="pb-12 mt-auto">
             <ChatForm
-              onSubmit={handleSubmit}
               templateText={templateText}
               setTemplateText={setTemplateText}
+              sendQuestion={sendQuestion}
             />
           </div>
         </main>
