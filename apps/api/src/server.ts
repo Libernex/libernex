@@ -1,4 +1,4 @@
-import express, {type Express, json, urlencoded} from "express";
+import express, { type Express, json, urlencoded } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import ChatRoute from "./chat.route";

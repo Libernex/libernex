@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 
 const useTemplatePrompt = () => {
   const [templatePrompt, setTemplatePrompt] = useState<string>("");

@@ -1,5 +1,5 @@
-import {useCallback, useEffect, useRef, useState} from "react";
-import {ChatInterface} from "@repo/types/src";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ChatInterface } from "@repo/types/src";
 
 const useChatHistory = () => {
   const [chatHistory, setChatHistory] = useState<ChatInterface[]>([]);
