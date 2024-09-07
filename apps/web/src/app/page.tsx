@@ -1,7 +1,7 @@
 import {LOGGER} from "@repo/logger";
 import {Link} from "@repo/ui/link";
 import {CounterButton} from "@repo/ui/counter-button";
-import "./styles.css"
+import "./styles.css";
 
 export const metadata = {
   title: "Store | Kitchen Sink",

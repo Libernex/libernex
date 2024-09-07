@@ -1,13 +1,13 @@
 import React from "react";
 
 export default function ChatLayout({
-                                       children
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode;
 }): JSX.Element {
-    return (
-        <div>
-            <main>{children}</main>
-        </div>
-    );
+  return (
+    <div>
+      <main>{children}</main>
+    </div>
+  );
 }
