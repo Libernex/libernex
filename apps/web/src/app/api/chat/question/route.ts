@@ -19,6 +19,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
         eventSource.onerror = (error) => {
           controller.error(error);
+          LOGGER(error);
           eventSource.close();
         };
 

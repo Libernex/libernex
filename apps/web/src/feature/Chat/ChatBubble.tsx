@@ -1,4 +1,5 @@
 import Image from "next/image";
+import starAvatarImage from 'public/Star-Avatar.webp';
 
 interface ChatBubbleProps {
   sender: {
@@ -23,7 +24,7 @@ function ChatBubble({
           alt={sender.nickname}
           className="w-12 h-12 rounded-full"
           height={48}
-          src={sender.avatarSrc}
+          src={sender.nickname !== "Libernex" ? starAvatarImage : sender.avatarSrc }
           width={48}
         />
         <div className="flex flex-col w-full leading-1.5">
