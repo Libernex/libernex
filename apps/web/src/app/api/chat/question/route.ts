@@ -3,7 +3,9 @@ import type { NextRequest } from "next/server";
 import EventSource from "eventsource";
 import { LOGGER } from "@repo/logger";
 
-export function GET(req: NextRequest): Response {
+export const dynamic = 'force-dynamic';
+
+export async function GET(req: NextRequest): Promise<Response> {
   try {
     // Next 서버에서 eventsource를 사용하여 외부 SSE 서버에 연결
     const eventSource = new EventSource("http://localhost:5050/question");
