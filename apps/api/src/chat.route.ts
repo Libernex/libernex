@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import {MessageInterface} from "@repo/types/src/Chat";
+import { MessageInterface } from "@repo/types/src/Chat";
 import * as crypto from "crypto";
 
 const router: Router = Router();
@@ -14,8 +14,12 @@ const chunks = `
 `.split(/\s+/);
 router.get("/question", async (req: Request, res: Response) => {
   const endMessage = createMessage(
-      {role: "assistance", name: "Libernex"},
-      {contentType: "text", body: "DONE"}
+    { role: "assistance", name: "Libernex" },
+    { contentType: "text", body: "DONE" },
+  );
+  const connectMessage = createMessage(
+    { role: "system", name: "Libernex" },
+    { contentType: "text", body: crypto.randomUUID() },
   );
 
   try {
@@ -26,15 +30,15 @@ router.get("/question", async (req: Request, res: Response) => {
     });
 
     res.write("event: connect\n");
-    res.write("data: Connected to SSE stream\n\n");
+    res.write(`data: ${JSON.stringify(connectMessage)} \n\n`);
 
     let result: string = "";
     for (const chunk of chunks) {
       result += chunk + " ";
 
       const message = createMessage(
-          {role: "assistance", name: "Libernex"},
-          {contentType: "text", body: chunk}
+        { role: "assistance", name: "Libernex" },
+        { contentType: "text", body: chunk+" " },
       );
 
       res.write(`event: message\n`);
@@ -42,29 +46,27 @@ router.get("/question", async (req: Request, res: Response) => {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-
     res.write(`event: message\n`);
-    res.write(`data: ${JSON.stringify(endMessage)}\n\n`);
+    res.write(`data: ${JSON.stringify(endMessage)} \n\n`);
     res.end();
   } catch (error) {
     console.error("SSE 에러:", error);
     res.write(`event: message\n`);
-    res.write(`data: ${JSON.stringify(endMessage)}\n\n`);
+    res.write(`data: ${JSON.stringify(endMessage)} \n\n`);
     res.end();
   }
-
 });
 
 const createMessage = (
-    author: {role: string, name: string},
-    content: {contentType: "text" | "file" | "link", body: string;}
+  author: { role: "assistance" | "system" | "user"; name: string },
+  content: { contentType: "text" | "file" | "link"; body: string },
 ): MessageInterface => {
   return {
     id: crypto.randomUUID(),
     author,
     content,
-    sentAt: new Date().toLocaleString()
-  }
-}
+    sentAt: new Date().toLocaleString(),
+  };
+};
 
 export default router;

@@ -10,11 +10,7 @@ function ChatHistory({ chatHistories }: ChatHistoryProps): JSX.Element {
     <div className="flex flex-col gap-4">
       {chatHistories.map((chatHistory: ChatInterface) => (
         <div key={chatHistory.id}>
-          <ChatBubble
-            message={chatHistory.message}
-            sender={chatHistory.sender}
-            sentAt={chatHistory.sentAt}
-          />
+          <ChatBubble chat={chatHistory} />
         </div>
       ))}
     </div>

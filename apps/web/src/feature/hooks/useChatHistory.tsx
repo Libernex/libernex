@@ -1,75 +1,61 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ChatInterface } from "@repo/types/src";
+import { MessageInterface } from "@repo/types/src";
 
 const useChatHistory = () => {
   const [chatHistory, setChatHistory] = useState<ChatInterface[]>([]);
-  const [lastAnswerMessage, setLastAnswerMessage] = useState<string>("");
-  const lastAnswerRef = useRef<ChatInterface | null>(null);
+    const currentAnswerRef = useRef<ChatInterface | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
-
-  const updateLastAnswer = useCallback((newMessage: string) => {
-    setLastAnswerMessage((prev) => prev + newMessage);
-  }, []);
-
-  useEffect(() => {
-    if (lastAnswerRef.current && lastAnswerMessage !== "") {
-      setChatHistory((prevHistory) =>
-        prevHistory.map((chat) =>
-          chat.id === lastAnswerRef.current?.id
-            ? { ...chat, message: lastAnswerMessage }
-            : chat,
-        ),
-      );
-    }
-  }, [lastAnswerMessage]);
 
   const sendQuestion = useCallback(
     async (question: ChatInterface): Promise<void> => {
+        setChatHistory((prevHistory) => [...prevHistory, question]);
+
       const answer: ChatInterface = {
+        id: window.crypto.randomUUID(),
         sender: {
+          role: "assistance",
           nickname: "Libernex",
           avatarSrc: "C-LX-Logo.svg",
         },
-        message: {
-          id: window.crypto.randomUUID(),
-          sentAt: new Date().toLocaleString(),
-          author: {
-            role: "assistance",
-            name: "Libernex"
-          },
-          content: {
-            contentType: "text",
-            body: ""
-          }
-        },
+        parts: [],
+        sentAt: new Date().toLocaleString(),
       };
-      setChatHistory((prevHistory) => [...prevHistory, question, answer]);
-      lastAnswerRef.current = answer;
-      setLastAnswerMessage(null);
 
-      await fetchAnswer();
+        if (eventSourceRef.current) {
+            eventSourceRef.current.close();
+        }
+
+      const query = JSON.stringify(question);
+      eventSourceRef.current = new EventSource(`/api/chat/question?${query}`);
+
+      setChatHistory((prevHistory) => [...prevHistory, answer]);
+        currentAnswerRef.current = answer;
+
+        eventSourceRef.current.addEventListener("connect", (event): void => {
+            const message: MessageInterface = JSON.parse(event.data);
+            if (currentAnswerRef.current) {
+                currentAnswerRef.current.id = message.content.body;
+                setChatHistory(prevHistory => [...prevHistory]); //이벤트 변화 트리거
+            }
+        });
+
+        eventSourceRef.current.addEventListener("message", (event): void => {
+            const message: MessageInterface = JSON.parse(event.data);
+            if (currentAnswerRef.current) {
+                currentAnswerRef.current.parts.push(message);
+                setChatHistory(prevHistory => [...prevHistory]);
+            }
+        });
+
+        eventSourceRef.current.onerror = (error) => {
+            currentAnswerRef.current = null;
+            eventSourceRef.current?.close();
+            eventSourceRef.current = null;
+        };
     },
-    [updateLastAnswer],
+    [],
   );
-
-  const fetchAnswer = (): void => {
-    // 이벤트 소스가 이미 연결되어 있다면 중복 연결 방지
-    if (eventSourceRef.current) {
-      return;
-    }
-
-    eventSourceRef.current = new EventSource("/api/chat/question");
-
-    eventSourceRef.current.addEventListener("message", (event) => {
-      updateLastAnswer(event.data as string); // 새 메시지를 마지막 응답으로 업데이트
-    });
-
-    // 오류 처리 및 연결 종료 시 클린업
-    eventSourceRef.current.onerror = (error) => {
-      eventSourceRef.current?.close();
-      eventSourceRef.current = null; // 연결 종료 시 eventSourceRef를 null로 설정
-    };
-  };
 
   useEffect(() => {
     return () => {

@@ -1,36 +1,38 @@
 import Image from "next/image";
-import starAvatarImage from 'public/Star-Avatar.webp';
+import starAvatarImage from "public/Star-Avatar.webp";
+import {ChatInterface} from "@repo/types/src";
+import {useEffect, useRef} from "react";
 
 interface ChatBubbleProps {
-  sender: {
-    nickname: string;
-    avatarSrc: string;
-  };
-  sentAt: string;
-  message: string;
-  status?: string;
+  chat: ChatInterface
+}
+
+const combineChatParts = (chat: ChatInterface): string => {
+  return chat.parts
+      .map(part => part.content.body)
+      .join("");
 }
 
 function ChatBubble({
-  sender,
-  sentAt,
-  message,
-  status,
+    chat
 }: ChatBubbleProps): JSX.Element {
+
   return (
     <div>
       <div className="flex items-start gap-2">
         <Image
-          alt={sender.nickname}
+          alt={chat.sender.nickname}
           className="w-12 h-12 rounded-full"
           height={48}
-          src={sender.nickname !== "Libernex" ? starAvatarImage : sender.avatarSrc }
+          src={
+            chat.sender.role === "user" ? starAvatarImage : chat.sender.avatarSrc
+          }
           width={48}
         />
         <div className="flex flex-col w-full leading-1.5">
-          <p className="text-lg font-normal py-2 text-gray-900">{message}</p>
-          <span className="text-sm font-normal text-gray-500">{sentAt}</span>
-          <span className="text-sm font-normal text-gray-500">{status}</span>
+            <p className="text-lg font-normal py-2 text-gray-900">{combineChatParts(chat)}</p>
+          <span className="text-sm font-normal text-gray-500">{chat.sentAt}</span>
+          <span className="text-sm font-normal text-gray-500">{chat.status}</span>
         </div>
       </div>
     </div>

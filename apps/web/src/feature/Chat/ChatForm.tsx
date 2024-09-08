@@ -1,6 +1,6 @@
 "use client";
 import type { ChangeEvent, KeyboardEventHandler } from "react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type {ChatInterface, MessageInterface} from "@repo/types/src";
 import { useStageStore } from "@/feature/store/stageStore.tsx";
@@ -25,23 +25,20 @@ function ChatForm({
     if (message.trim() === "") return;
 
     const messageDoc: MessageInterface = {
+      author: {name: "lyght", role: "user"},
+      content: {body: message, contentType: "text"},
       id: window.crypto.randomUUID(),
-      author: {
-        name: "lyght",
-        role: "user"
-      },
-      content: {
-        contentType: "text",
-        body: message
-      },
       sentAt: new Date().toLocaleString()
     }
     const question: ChatInterface = {
+      id: window.crypto.randomUUID(),
+      sentAt: new Date().toLocaleString(),
       sender: {
         nickname: "lyght",
         avatarSrc: "Star-Avatar.webp",
+        role: "user"
       },
-      message: messageDoc
+      parts: [messageDoc]
     };
 
     setMessage("");

@@ -1,10 +1,10 @@
 // app/api/chat/question/route.ts
 import type { NextRequest } from "next/server";
 import EventSource from "eventsource";
-import {LOGGER} from "@repo/logger";
-import {MessageInterface} from "@repo/types/src";
+import { LOGGER } from "@repo/logger";
+import { MessageInterface } from "@repo/types/src";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest): Promise<Response> {
   try {
@@ -13,17 +13,21 @@ export async function GET(req: NextRequest): Promise<Response> {
 
     const readableStream = new ReadableStream({
       start(controller) {
+        eventSource.addEventListener("connect", (event): void => {
+          controller.enqueue(`event: connect\n`);
+          controller.enqueue(`data: ${event.data} \n\n`);
+        });
+
         eventSource.onmessage = (event) => {
           // SSE 응답을 클라이언트로 스트리밍
           const message: MessageInterface = JSON.parse(event.data);
-          if (message.content.body==="DONE") {
+          if (message.content.body === "DONE") {
             controller.close();
             eventSource.close();
             return;
           }
 
-          controller.enqueue(`data: ${event.data}\n\n`);
-          console.log(event.data);;
+          controller.enqueue(`data: ${event.data} \n\n`);
         };
 
         eventSource.onerror = (error) => {
