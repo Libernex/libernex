@@ -9,11 +9,14 @@ import { useStageStore } from "@/feature/store/stageStore.tsx";
 import ChatHistory from "@/feature/Chat/ChatHistory.tsx";
 import useChatHistory from "@/feature/hooks/useChatHistory.tsx";
 import ChatRoomList from "@/feature/Chat/ChatRoomList.tsx";
+import {useEffect, useRef} from "react";
 
 function ChatContainer(): JSX.Element {
   const { templatePrompt, setTemplatePrompt } = useTemplatePrompt();
   const { stage } = useStageStore();
   const { chatHistory, sendQuestion } = useChatHistory();
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
 
   const nickname = "Lyght";
 
@@ -22,6 +25,12 @@ function ChatContainer(): JSX.Element {
       LOGGER("Error sending question:", error);
     });
   };
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
 
   return (
     <div className="h-screen flex">
@@ -38,7 +47,7 @@ function ChatContainer(): JSX.Element {
         <ChatRoomList />
       </aside>
       <div className="flex-1 flex flex-col">
-        <main className="flex-1 overflow-auto pt-16">
+        <main ref={chatContainerRef} className="flex-1 overflow-auto pt-16">
           <div className="text-base py-[18px] px-3 md:px-4 m-auto w-full lg:px-1 xl:px-5">
             <div className="mx-auto flex flex-col gap-4 text-base md:gap-5 lg:gap-6 md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem]">
               {stage === "welcome" ? (
