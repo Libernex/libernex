@@ -45,31 +45,31 @@ const useChatHistory = () => {
   );
 
   const fetchAnswer = async (): Promise<void> => {
-    eventSourceRef.current = new EventSource("http://localhost:5050/question");
+    // 이벤트 소스가 이미 연결되어 있다면 중복 연결 방지
+    if (eventSourceRef.current) {
+      return;
+    }
 
-    eventSourceRef.current.addEventListener("connect", (event) => {
-      console.log(event.data);
-    });
+    eventSourceRef.current = new EventSource("/api/chat/question");
 
     eventSourceRef.current.addEventListener("message", (event) => {
       console.log(event.data);
-      updateLastAnswer(event.data as string);
+      updateLastAnswer(event.data as string);  // 새 메시지를 마지막 응답으로 업데이트
     });
 
-    eventSourceRef.current.addEventListener("close", (event) => {
-      console.log(event.data);
-      eventSourceRef.current?.close();
-    });
-
+    // 오류 처리 및 연결 종료 시 클린업
     eventSourceRef.current.onerror = (error) => {
       console.error("EventSource failed:", error);
       eventSourceRef.current?.close();
+      eventSourceRef.current = null;  // 연결 종료 시 eventSourceRef를 null로 설정
     };
   };
+
 
   useEffect(() => {
     return () => {
       eventSourceRef.current?.close();
+      eventSourceRef.current = null;
     };
   }, []);
 
