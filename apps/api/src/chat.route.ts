@@ -28,6 +28,7 @@ router.get("/question", async (req: Request, res: Response) => {
       "Cache-Control": "no-cache",
       Connection: "keep-alive",
     });
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     res.write("event: connect\n");
     res.write(`data: ${JSON.stringify(connectMessage)} \n\n`);
