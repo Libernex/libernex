@@ -2,19 +2,23 @@
 import type { ChangeEvent, KeyboardEventHandler } from "react";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import type {ChatInterface, MessageInterface} from "@repo/types/src";
+import type { ChatInterface, MessageInterface } from "@repo/types/src";
 import { useStageStore } from "@/feature/store/stageStore.tsx";
 
 interface ChatFormProps {
   templatePrompt: string;
   setTemplateText: (text: string) => void;
   sendQuestion: (chat: ChatInterface) => void;
+  chatState: "idle" | "sending" | "receiving" | "error";
+  abortCurrentQuestion: () => void;
 }
 
 function ChatForm({
   templatePrompt,
   setTemplateText,
   sendQuestion,
+  chatState,
+  abortCurrentQuestion,
 }: ChatFormProps): JSX.Element {
   const [message, setMessage] = useState<string>("");
   const { stage, setStage } = useStageStore();
@@ -22,23 +26,24 @@ function ChatForm({
 
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
+    if (chatState === "sending" || chatState === "receiving") return;
     if (message.trim() === "") return;
 
     const messageDoc: MessageInterface = {
-      author: {name: "lyght", role: "user"},
-      content: {body: message, contentType: "text"},
+      author: { name: "lyght", role: "user" },
+      content: { body: message, contentType: "text" },
       id: window.crypto.randomUUID(),
-      sentAt: new Date().toLocaleString()
-    }
+      sentAt: new Date().toLocaleString(),
+    };
     const question: ChatInterface = {
       id: window.crypto.randomUUID(),
       sentAt: new Date().toLocaleString(),
       sender: {
         nickname: "lyght",
         avatarSrc: "Star-Avatar.webp",
-        role: "user"
+        role: "user",
       },
-      parts: [messageDoc]
+      parts: [messageDoc],
     };
 
     setMessage("");
@@ -54,6 +59,10 @@ function ChatForm({
       e.preventDefault();
       handleSubmit(e as unknown as React.FormEvent);
     }
+  };
+
+  const handleStop = (): void => {
+    abortCurrentQuestion();
   };
 
   const handleChangeText = (e: ChangeEvent<HTMLTextAreaElement>): void => {
@@ -89,21 +98,50 @@ function ChatForm({
           }}
           value={message}
         />
-        <button
-          aria-label="Send message"
-          className="mr-4 w-10 h-10 flex items-center justify-center"
-          type="submit"
-        >
-          <Image
-            alt="Submit"
-            className="hover-grow w-3/4 h-auto"
-            height={75}
-            src="Submit-Arrow.svg"
-            width={75}
-          />
-        </button>
+        {chatState === "idle" ? (
+          <SubmitButton />
+        ) : (
+          <StopButton onClick={handleStop} />
+        )}
       </form>
     </div>
+  );
+}
+
+function SubmitButton(): JSX.Element {
+  return (
+    <button
+      aria-label="Send message"
+      className="mr-4 w-10 h-10 flex items-center justify-center"
+      type="submit"
+    >
+      <Image
+        alt={"Submit"}
+        className="hover-grow w-3/4 h-auto"
+        height={75}
+        src={"Submit-Arrow.svg"}
+        width={75}
+      />
+    </button>
+  );
+}
+
+function StopButton({ onClick }: { onClick: () => void }): JSX.Element {
+  return (
+    <button
+      aria-label="Stop recevice"
+      className="mr-4 w-10 h-10 flex items-center justify-center"
+      onClick={onClick}
+      type="button"
+    >
+      <Image
+        alt={"Stop"}
+        className="hover-grow w-4/5 h-auto"
+        height={75}
+        src={"Stop-Button.svg"}
+        width={75}
+      />
+    </button>
   );
 }
 

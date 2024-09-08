@@ -38,7 +38,7 @@ router.get("/question", async (req: Request, res: Response) => {
 
       const message = createMessage(
         { role: "assistance", name: "Libernex" },
-        { contentType: "text", body: chunk+" " },
+        { contentType: "text", body: chunk + " " },
       );
 
       res.write(`event: message\n`);
