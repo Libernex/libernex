@@ -4,8 +4,8 @@ const useTemplatePrompt = () => {
   const [templatePrompt, setTemplatePrompt] = useState<string>("");
 
   return {
-    templateText: templatePrompt,
-    setTemplateText: setTemplatePrompt,
+    templatePrompt: templatePrompt,
+    setTemplatePrompt,
   };
 };
 

@@ -21,7 +21,10 @@ export default function Store(): JSX.Element {
         </p>
       </h1>
       <CounterButton />
-      <button className="bg-gradient-to-r from-blue-400 via-mint-500 to-emerald-500 text-white font-bold py-2 px-4 rounded">
+      <button
+        className="bg-gradient-to-r from-blue-400 via-mint-500 to-emerald-500 text-white font-bold py-2 px-4 rounded"
+        type="button"
+      >
         <Link href="/chat" newTab>
           Go to Chat
         </Link>

@@ -1,4 +1,4 @@
-const ChatRoomList = () => {
+function ChatRoomList(): JSX.Element {
   return (
     <div>
       <ul>
@@ -8,6 +8,6 @@ const ChatRoomList = () => {
       </ul>
     </div>
   );
-};
+}
 
 export default ChatRoomList;

@@ -2,17 +2,17 @@
 import type { ChangeEvent, KeyboardEventHandler } from "react";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import type { ChatInterface } from "@repo/types/src";
 import { useStageStore } from "@/feature/store/stageStore.tsx";
-import { ChatInterface } from "@repo/types/src";
 
 interface ChatFormProps {
-  templateText: string;
+  templatePrompt: string;
   setTemplateText: (text: string) => void;
   sendQuestion: (chat: ChatInterface) => void;
 }
 
 function ChatForm({
-  templateText,
+  templatePrompt,
   setTemplateText,
   sendQuestion,
 }: ChatFormProps): JSX.Element {
@@ -20,7 +20,7 @@ function ChatForm({
   const { stage, setStage } = useStageStore();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
+  const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     if (message.trim() === "") return;
 
@@ -31,15 +31,15 @@ function ChatForm({
         avatarSrc: "Star-Avatar.webp",
       },
       sentAt: new Date().toLocaleString(),
-      message: message,
+      message,
     };
 
     setMessage("");
-    if (stage == "welcome") {
+    if (stage === "welcome") {
       setStage("chatting");
     }
 
-    await sendQuestion(question);
+    sendQuestion(question);
   };
 
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
@@ -54,14 +54,14 @@ function ChatForm({
   };
 
   useEffect(() => {
-    if (templateText.trim() !== "") {
-      setMessage(templateText);
+    if (templatePrompt.trim() !== "") {
+      setMessage(templatePrompt);
       setTemplateText("");
       if (textAreaRef.current) {
         textAreaRef.current.focus();
       }
     }
-  }, [templateText]);
+  }, [setTemplateText, templatePrompt]);
 
   return (
     <div className="w-full p-1 rounded-2xl gradient-border">
@@ -70,11 +70,11 @@ function ChatForm({
         onSubmit={handleSubmit}
       >
         <textarea
-          ref={textAreaRef}
           className="flex-grow p-4 text-lg font-light resize-none outline-none rounded-l-2xl overflow-hidden"
           onChange={handleChangeText}
           onKeyDown={handleKeyDown}
           placeholder="질문을 통해 대화를 시작할 수 있어요"
+          ref={textAreaRef}
           rows={2}
           style={{
             scrollbarWidth: "none", // Firefox
@@ -88,8 +88,8 @@ function ChatForm({
           type="submit"
         >
           <Image
-            className="hover-grow w-3/4 h-auto"
             alt="Submit"
+            className="hover-grow w-3/4 h-auto"
             height={75}
             src="Submit-Arrow.svg"
             width={75}

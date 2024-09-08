@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface ChatBubbleProps {
   sender: {
     nickname: string;
@@ -17,15 +19,14 @@ function ChatBubble({
   return (
     <div>
       <div className="flex items-start gap-2">
-        <img
-          className="w-12 h-12 rounded-full"
-          src={sender.avatarSrc}
+        <Image
           alt={sender.nickname}
+          className="w-12 h-12 rounded-full"
+          height={48}
+          src={sender.avatarSrc}
+          width={48}
         />
         <div className="flex flex-col w-full leading-1.5">
-          {/*<div className="flex items-center space-x-2 rtl:space-x-reverse">*/}
-          {/*    <span className="text-md font-semibold text-gray-900">{sender.nickname}</span>*/}
-          {/*</div>*/}
           <p className="text-lg font-normal py-2 text-gray-900">{message}</p>
           <span className="text-sm font-normal text-gray-500">{sentAt}</span>
           <span className="text-sm font-normal text-gray-500">{status}</span>

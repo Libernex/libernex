@@ -9,5 +9,7 @@ interface StageStore {
 
 export const useStageStore = create<StageStore>((set) => ({
   stage: "welcome",
-  setStage: (newStage: Stage) => set({ stage: newStage }),
+  setStage: (newStage: Stage) => {
+    set({ stage: newStage });
+  },
 }));

@@ -10,11 +10,11 @@ function SampleTemplateSection({
       <div className="flex justify-between">
         {cardData.map((card, index) => (
           <Card
+            description={card.description}
             key={index}
+            onClick={() => setTemplateText(card.prompt)}
             src={card.src}
             title={card.title}
-            description={card.description}
-            onClick={() => setTemplateText(card.prompt)}
           />
         ))}
       </div>
@@ -36,8 +36,8 @@ function Card({
   return (
     <div className="flex flex-col my-2 group" onClick={onClick}>
       <img
-        src={src}
         className="w-36 h-36 group-hover:hover-grow drop-shadow-xl"
+        src={src}
       />
       <span className="text-xl font-bold mb-2">{title}</span>
       <span className="w-40 text-sm" style={{ wordBreak: "keep-all" }}>
