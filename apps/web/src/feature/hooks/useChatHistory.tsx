@@ -25,19 +25,27 @@ const useChatHistory = () => {
 
   const sendQuestion = useCallback(
     async (question: ChatInterface): Promise<void> => {
-      const uid = window.crypto.randomUUID();
       const answer: ChatInterface = {
-        id: uid,
         sender: {
           nickname: "Libernex",
           avatarSrc: "C-LX-Logo.svg",
         },
-        sentAt: new Date().toLocaleString(),
-        message: "",
+        message: {
+          id: window.crypto.randomUUID(),
+          sentAt: new Date().toLocaleString(),
+          author: {
+            role: "assistance",
+            name: "Libernex"
+          },
+          content: {
+            contentType: "text",
+            body: ""
+          }
+        },
       };
       setChatHistory((prevHistory) => [...prevHistory, question, answer]);
       lastAnswerRef.current = answer;
-      setLastAnswerMessage("");
+      setLastAnswerMessage(null);
 
       await fetchAnswer();
     },

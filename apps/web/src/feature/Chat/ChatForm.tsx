@@ -2,7 +2,7 @@
 import type { ChangeEvent, KeyboardEventHandler } from "react";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import type { ChatInterface } from "@repo/types/src";
+import type {ChatInterface, MessageInterface} from "@repo/types/src";
 import { useStageStore } from "@/feature/store/stageStore.tsx";
 
 interface ChatFormProps {
@@ -24,14 +24,24 @@ function ChatForm({
     e.preventDefault();
     if (message.trim() === "") return;
 
-    const question: ChatInterface = {
+    const messageDoc: MessageInterface = {
       id: window.crypto.randomUUID(),
+      author: {
+        name: "lyght",
+        role: "user"
+      },
+      content: {
+        contentType: "text",
+        body: message
+      },
+      sentAt: new Date().toLocaleString()
+    }
+    const question: ChatInterface = {
       sender: {
         nickname: "lyght",
         avatarSrc: "Star-Avatar.webp",
       },
-      sentAt: new Date().toLocaleString(),
-      message,
+      message: messageDoc
     };
 
     setMessage("");

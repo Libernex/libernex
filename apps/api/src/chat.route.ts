@@ -1,4 +1,6 @@
 import { Request, Response, Router } from "express";
+import {MessageInterface} from "@repo/types/src/Chat";
+import * as crypto from "crypto";
 
 const router: Router = Router();
 const chunks = `
@@ -11,29 +13,58 @@ const chunks = `
 대통령이 제1항의 기간 내에 공포나 재의의 요구를 하지 아니한 때에도 그 법률안은 법률로서 확정된다. 정당은 그 목적·조직과 활동이 민주적이어야 하며, 국민의 정치적 의사형성에 참여하는 데 필요한 조직을 가져야 한다.
 `.split(/\s+/);
 router.get("/question", async (req: Request, res: Response) => {
-  res.writeHead(200, {
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-cache",
-    Connection: "keep-alive",
-  });
+  const endMessage = createMessage(
+      {role: "assistance", name: "Libernex"},
+      {contentType: "text", body: "DONE"}
+  );
 
-  res.write("event: connect\n");
-  res.write("data: Connected to SSE stream\n\n");
+  try {
+    res.writeHead(200, {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
+    });
 
-  let result: string = "";
-  for (const chunk of chunks) {
-    result += chunk + " ";
+    res.write("event: connect\n");
+    res.write("data: Connected to SSE stream\n\n");
+
+    let result: string = "";
+    for (const chunk of chunks) {
+      result += chunk + " ";
+
+      const message = createMessage(
+          {role: "assistance", name: "Libernex"},
+          {contentType: "text", body: chunk}
+      );
+
+      res.write(`event: message\n`);
+      res.write(`data: ${JSON.stringify(message)} \n\n`);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+
+
     res.write(`event: message\n`);
-    res.write(`data: ${chunk} \n\n`);
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    res.write(`data: ${JSON.stringify(endMessage)}\n\n`);
+    res.end();
+  } catch (error) {
+    console.error("SSE 에러:", error);
+    res.write(`event: message\n`);
+    res.write(`data: ${JSON.stringify(endMessage)}\n\n`);
+    res.end();
   }
 
-  // res.write("event: message\n");
-  // res.write(`data: ${result}\n\n`);
-
-  res.write(`event: close\n`);
-  res.write(`data: DONE"\n\n`);
-  res.end();
 });
+
+const createMessage = (
+    author: {role: string, name: string},
+    content: {contentType: "text" | "file" | "link", body: string;}
+): MessageInterface => {
+  return {
+    id: crypto.randomUUID(),
+    author,
+    content,
+    sentAt: new Date().toLocaleString()
+  }
+}
 
 export default router;
