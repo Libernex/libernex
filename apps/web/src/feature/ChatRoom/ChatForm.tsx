@@ -2,7 +2,10 @@
 import type { ChangeEvent } from "react";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import type { ChatInterface, MessageInterface } from "@repo/types/src";
+import type {
+  ChatInterface,
+  MessageInterface,
+} from "../../../../../packages/types/src";
 import { useStageStore } from "@/feature/Chat/store/stageStore.tsx";
 import useFileUploads from "@/feature/Chat/hooks/useFileUploads.tsx";
 import UploadedFileWraps from "@/feature/Chat/UploadedFileWraps.tsx";

@@ -4,12 +4,13 @@ import type { ChatInterface } from "@repo/types/src";
 import { LOGGER } from "@repo/logger";
 import { useEffect, useRef } from "react";
 import WelcomePanel from "@/feature/Chat/WelcomePanel.tsx";
-import ChatForm from "@/feature/Chat/ChatForm.tsx";
+import ChatForm from "@/feature/ChatRoom/ChatForm.tsx";
 import useTemplatePrompt from "@/feature/Chat/hooks/useTemplatePrompt.tsx";
 import { useStageStore } from "@/feature/Chat/store/stageStore.tsx";
 import ChatHistory from "@/feature/Chat/ChatHistory.tsx";
 import useChatHistory from "@/feature/Chat/hooks/useChatHistory.tsx";
-import ChatRoomList from "@/feature/Chat/ChatRoomList.tsx";
+import ChatRoomList from "@/feature/ChatRoom/ChatRoomList.tsx";
+import ChatRoomContainer from "@/feature/ChatRoom/ChatRoomContainer.tsx";
 
 function ChatContainer(): JSX.Element {
   const { templatePrompt, setTemplatePrompt } = useTemplatePrompt();
@@ -45,7 +46,7 @@ function ChatContainer(): JSX.Element {
             width={100}
           />
         </div>
-        <ChatRoomList />
+        <ChatRoomContainer />
       </aside>
       <div className="flex-1 flex flex-col">
         <main className="flex-1 overflow-auto pt-16" ref={chatContainerRef}>
