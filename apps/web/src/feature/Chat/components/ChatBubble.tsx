@@ -1,6 +1,6 @@
 import Image from "next/image";
-import starAvatarImage from "public/Star-Avatar.webp";
-import { ChatInterface } from "@repo/types/src";
+import starAvatarImage from "../../../../public/Star-Avatar.webp";
+import { ChatInterface } from "../../../../../../packages/types/src";
 import { useEffect } from "react";
 
 interface ChatBubbleProps {

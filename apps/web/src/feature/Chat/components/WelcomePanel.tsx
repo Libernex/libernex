@@ -1,7 +1,7 @@
 import React from "react";
 import "@/feature/Chat/styles/styles.css";
-import WelcomeMessage from "@/feature/Chat/WelcomeMessage.tsx";
-import SampleTemplateSection from "@/feature/Chat/SampleTemplateSection.tsx";
+import WelcomeMessage from "@/feature/Chat/components/WelcomeMessage.tsx";
+import SampleTemplateSection from "@/feature/Chat/components/SampleTemplateSection.tsx";
 
 interface WelcomePanelProps {
   nickname: string;

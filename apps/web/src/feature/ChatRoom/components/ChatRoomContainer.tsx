@@ -1,4 +1,4 @@
-import ChatRoomList from "@/feature/ChatRoom/ChatRoomList.tsx";
+import ChatRoomList from "@/feature/ChatRoom/components/ChatRoomList.tsx";
 
 function ChatRoomContainer(): JSX.Element {
   return (
