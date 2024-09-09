@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import FileIconMapper from "@/feature/Chat/mapper/FileIconMapper.tsx";
 import Image from "next/image";
-import { Popover } from "@repo/ui/src/popover";
+import { Popover } from "@repo/ui/popover";
 
 interface UploadedFileWrapsProps {
   files: File[];

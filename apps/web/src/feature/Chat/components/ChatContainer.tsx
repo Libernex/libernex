@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import type { ChatInterface } from "../../../../../../packages/types/src";
-import { LOGGER } from "@repo/logger";
+import type { ChatInterface } from "@repo/types/src/Chat"
+import { LOGGER } from "@repo/logger/src";
 import { useEffect, useRef } from "react";
 import WelcomePanel from "@/feature/Chat/components/WelcomePanel.tsx";
 import ChatForm from "@/feature/Chat/components/ChatForm.tsx";
@@ -9,7 +9,6 @@ import useTemplatePrompt from "@/feature/Chat/hooks/useTemplatePrompt.tsx";
 import { useStageStore } from "@/feature/Chat/store/stageStore.tsx";
 import ChatHistory from "@/feature/Chat/components/ChatHistory.tsx";
 import useChatHistory from "@/feature/Chat/hooks/useChatHistory.tsx";
-import ChatRoomList from "@/feature/ChatRoom/components/ChatRoomList.tsx";
 import ChatRoomContainer from "@/feature/ChatRoom/components/ChatRoomContainer.tsx";
 
 function ChatContainer(): JSX.Element {
