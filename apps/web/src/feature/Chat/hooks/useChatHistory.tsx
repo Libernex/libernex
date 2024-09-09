@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { ChatInterface } from "@repo/types/src";
-import { MessageInterface } from "@repo/types/src";
+import type { ChatInterface } from "../../../../../../packages/types/src";
+import { MessageInterface } from "../../../../../../packages/types/src";
 
 type ChatState = "idle" | "sending" | "receiving" | "error";
 

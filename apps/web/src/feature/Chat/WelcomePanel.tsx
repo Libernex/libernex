@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/styles.css";
+import "@/feature/Chat/styles/styles.css";
 import WelcomeMessage from "@/feature/Chat/WelcomeMessage.tsx";
 import SampleTemplateSection from "@/feature/Chat/SampleTemplateSection.tsx";
 
