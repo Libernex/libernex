@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import type { ChatInterface } from "@repo/types/src/Chat"
+import type { ChatInterface } from "@repo/types/src/Chat";
 import { LOGGER } from "@repo/logger/src";
 import { useEffect, useRef } from "react";
 import WelcomePanel from "@/feature/Chat/components/WelcomePanel.tsx";
