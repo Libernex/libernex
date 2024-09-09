@@ -5,7 +5,7 @@ import Image from "next/image";
 import type {
   ChatInterface,
   MessageInterface,
-} from "../../../../../../packages/types/src";
+} from "@repo/types/src/Chat";
 import { useStageStore } from "@/feature/Chat/store/stageStore.tsx";
 import useFileUploads from "@/feature/Chat/hooks/useFileUploads.tsx";
 import UploadedFileWraps from "@/feature/Chat/components/UploadedFileWraps.tsx";
@@ -90,7 +90,13 @@ function ChatForm({
   }, [setTemplateText, templatePrompt]);
 
   return (
-    <div className="w-full p-1 rounded-2xl gradient-border">
+    <div
+        className="w-full p-1 rounded-2xl gradient-border"
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+    >
       <UploadedFileWraps files={files} handleFileRemove={handleFileRemove} />
       <form
         className="flex items-center bg-white rounded-2xl"
@@ -100,10 +106,6 @@ function ChatForm({
           className="flex-grow p-4 text-lg font-light resize-none outline-none rounded-l-2xl overflow-hidden"
           onChange={handleChangeText}
           onKeyDown={handleKeyDown}
-          onDragEnter={handleDragEnter}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
           placeholder="질문을 통해 대화를 시작할 수 있어요"
           ref={textAreaRef}
           rows={2}

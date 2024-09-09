@@ -40,12 +40,9 @@ function FileWrap({
     setIsPopoverVisible(false);
   }, []);
 
-  useEffect(() => {
-    console.log(isPopoverVisible);
-  }, [isPopoverVisible]);
-
   const fileExtension = file.name.split(".").pop()?.toLowerCase() || "";
-  const fileIcon = FileIconMapper[fileExtension];
+  const src = file.type.startsWith("image") ? URL.createObjectURL(file) : FileIconMapper[fileExtension];
+  if (!src) return <></>
 
   return (
     <div>
@@ -55,19 +52,13 @@ function FileWrap({
         onMouseLeave={handleMouseLeave}
       >
         <Image
-          className="w-3/4 h-3/4"
-          src={fileIcon}
-          alt={`${fileExtension} file icon`}
-          width={24}
-          height={24}
+            className="w-3/4 h-3/4"
+            src={src}
+            alt={file.name}
+            width={24}
+            height={24}
         />
-        <button
-          className="absolute top-0 right-0 pl-1"
-          aria-label="Close"
-          onClick={() => onClick(file.name, file.lastModified)}
-        >
-          <Image src="/C-Close.svg" alt="Close icon" width={24} height={24} />
-        </button>
+        <CloseButton />
       </div>
       <Popover
         id={`popover-${file.name}`}
@@ -78,6 +69,20 @@ function FileWrap({
       />
     </div>
   );
+
+  function CloseButton() {
+    return (
+        <button
+            className="absolute top-0 right-0 pl-1"
+            aria-label="Close"
+            onClick={() => onClick(file.name, file.lastModified)}
+        >
+          <Image src="/C-Close.svg" alt="Close icon" width={24} height={24} />
+        </button>
+    );
+  }
+
 }
+
 
 export default UploadedFileWraps;
