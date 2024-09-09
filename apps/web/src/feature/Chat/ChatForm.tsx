@@ -1,9 +1,11 @@
 "use client";
-import type { ChangeEvent, KeyboardEventHandler } from "react";
+import type { ChangeEvent } from "react";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { ChatInterface, MessageInterface } from "@repo/types/src";
-import { useStageStore } from "@/feature/store/stageStore.tsx";
+import { useStageStore } from "@/feature/Chat/store/stageStore.tsx";
+import useFileUploads from "@/feature/Chat/hooks/useFileUploads.tsx";
+import UploadedFileWraps from "@/feature/Chat/UploadedFileWraps.tsx";
 
 interface ChatFormProps {
   templatePrompt: string;
@@ -23,6 +25,15 @@ function ChatForm({
   const [message, setMessage] = useState<string>("");
   const { stage, setStage } = useStageStore();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  const {
+    handleDragEnter,
+    handleDragLeave,
+    handleDragOver,
+    handleDrop,
+    handleFileRemove,
+    files,
+  } = useFileUploads();
 
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
@@ -54,15 +65,11 @@ function ChatForm({
     sendQuestion(question);
   };
 
-  const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e as unknown as React.FormEvent);
     }
-  };
-
-  const handleStop = (): void => {
-    abortCurrentQuestion();
   };
 
   const handleChangeText = (e: ChangeEvent<HTMLTextAreaElement>): void => {
@@ -81,6 +88,7 @@ function ChatForm({
 
   return (
     <div className="w-full p-1 rounded-2xl gradient-border">
+      <UploadedFileWraps files={files} handleFileRemove={handleFileRemove} />
       <form
         className="flex items-center bg-white rounded-2xl"
         onSubmit={handleSubmit}
@@ -89,6 +97,10 @@ function ChatForm({
           className="flex-grow p-4 text-lg font-light resize-none outline-none rounded-l-2xl overflow-hidden"
           onChange={handleChangeText}
           onKeyDown={handleKeyDown}
+          onDragEnter={handleDragEnter}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
           placeholder="질문을 통해 대화를 시작할 수 있어요"
           ref={textAreaRef}
           rows={2}
@@ -101,7 +113,7 @@ function ChatForm({
         {chatState === "idle" ? (
           <SubmitButton />
         ) : (
-          <StopButton onClick={handleStop} />
+          <StopButton onClick={abortCurrentQuestion} />
         )}
       </form>
     </div>

@@ -5,10 +5,10 @@ import { LOGGER } from "@repo/logger";
 import { useEffect, useRef } from "react";
 import WelcomePanel from "@/feature/Chat/WelcomePanel.tsx";
 import ChatForm from "@/feature/Chat/ChatForm.tsx";
-import useTemplatePrompt from "@/feature/hooks/useTemplatePrompt.tsx";
-import { useStageStore } from "@/feature/store/stageStore.tsx";
+import useTemplatePrompt from "@/feature/Chat/hooks/useTemplatePrompt.tsx";
+import { useStageStore } from "@/feature/Chat/store/stageStore.tsx";
 import ChatHistory from "@/feature/Chat/ChatHistory.tsx";
-import useChatHistory from "@/feature/hooks/useChatHistory.tsx";
+import useChatHistory from "@/feature/Chat/hooks/useChatHistory.tsx";
 import ChatRoomList from "@/feature/Chat/ChatRoomList.tsx";
 
 function ChatContainer(): JSX.Element {
