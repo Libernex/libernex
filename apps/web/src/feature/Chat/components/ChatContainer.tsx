@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { ChatInterface } from "@repo/types/src/Chat";
 import { LOGGER } from "@repo/logger/src";
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import WelcomePanel from "@/feature/Chat/components/WelcomePanel.tsx";
 import ChatForm from "@/feature/Chat/components/ChatForm.tsx";
 import useTemplatePrompt from "@/feature/Chat/hooks/useTemplatePrompt.tsx";
@@ -12,6 +13,8 @@ import useChatHistory from "@/feature/Chat/hooks/useChatHistory.tsx";
 import ChatRoomContainer from "@/feature/ChatRoom/components/ChatRoomContainer.tsx";
 
 function ChatContainer(): JSX.Element {
+  const router = useRouter();
+
   const { templatePrompt, setTemplatePrompt } = useTemplatePrompt();
   const { stage } = useStageStore();
   const { chatHistory, sendQuestion, state, abortCurrentQuestion } =
@@ -36,7 +39,10 @@ function ChatContainer(): JSX.Element {
   return (
     <div className="h-screen flex">
       <aside className="hidden md:block w-56 shrink-0 border-r-2 border-gray-200 pt-16">
-        <div className="flex justify-center">
+        <div
+          className="flex justify-center"
+          onClick={() => router.push("/chat")}
+        >
           <Image
             alt="L-LX Logo"
             className="w-3/4 h-auto"

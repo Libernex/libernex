@@ -4,24 +4,32 @@ const useFileUploads = () => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [files, setFiles] = useState<File[]>([]);
 
-  const handleDragEnter = (e: React.DragEvent<HTMLTextAreaElement | HTMLDivElement>): void => {
+  const handleDragEnter = (
+    e: React.DragEvent<HTMLTextAreaElement | HTMLDivElement>,
+  ): void => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLTextAreaElement | HTMLDivElement>): void => {
+  const handleDragOver = (
+    e: React.DragEvent<HTMLTextAreaElement | HTMLDivElement>,
+  ): void => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  const handleDragLeave = (e: React.DragEvent<HTMLTextAreaElement | HTMLDivElement>): void => {
+  const handleDragLeave = (
+    e: React.DragEvent<HTMLTextAreaElement | HTMLDivElement>,
+  ): void => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLTextAreaElement | HTMLDivElement>): void => {
+  const handleDrop = (
+    e: React.DragEvent<HTMLTextAreaElement | HTMLDivElement>,
+  ): void => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);

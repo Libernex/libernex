@@ -1,11 +1,18 @@
-function ChatRoomList(): JSX.Element {
+import { ChatRoomInterface } from "@repo/types/dist";
+import ChatRoomItem from "@/feature/ChatRoom/components/ChatRoomItem.tsx";
+
+interface ChatRoomListProps {
+  chatRooms: ChatRoomInterface[];
+}
+
+function ChatRoomList({ chatRooms }: ChatRoomListProps): JSX.Element {
   return (
-    <div>
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-      </ul>
+    <div className="flex flex-col w-48 text-gray-900">
+      {chatRooms.map((charRoom) => (
+        <div key={charRoom.id}>
+          <ChatRoomItem chatRoom={charRoom} />
+        </div>
+      ))}
     </div>
   );
 }

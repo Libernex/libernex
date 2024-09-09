@@ -2,10 +2,7 @@
 import type { ChangeEvent } from "react";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import type {
-  ChatInterface,
-  MessageInterface,
-} from "@repo/types/src/Chat";
+import type { ChatInterface, MessageInterface } from "@repo/types/src/Chat";
 import { useStageStore } from "@/feature/Chat/store/stageStore.tsx";
 import useFileUploads from "@/feature/Chat/hooks/useFileUploads.tsx";
 import UploadedFileWraps from "@/feature/Chat/components/UploadedFileWraps.tsx";
@@ -91,11 +88,11 @@ function ChatForm({
 
   return (
     <div
-        className="w-full p-1 rounded-2xl gradient-border"
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
+      className="w-full p-1 rounded-2xl gradient-border"
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
     >
       <UploadedFileWraps files={files} handleFileRemove={handleFileRemove} />
       <form

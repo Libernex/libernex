@@ -41,8 +41,10 @@ function FileWrap({
   }, []);
 
   const fileExtension = file.name.split(".").pop()?.toLowerCase() || "";
-  const src = file.type.startsWith("image") ? URL.createObjectURL(file) : FileIconMapper[fileExtension];
-  if (!src) return <></>
+  const src = file.type.startsWith("image")
+    ? URL.createObjectURL(file)
+    : FileIconMapper[fileExtension];
+  if (!src) return <></>;
 
   return (
     <div>
@@ -52,11 +54,11 @@ function FileWrap({
         onMouseLeave={handleMouseLeave}
       >
         <Image
-            className="w-3/4 h-3/4"
-            src={src}
-            alt={file.name}
-            width={24}
-            height={24}
+          className="w-3/4 h-3/4"
+          src={src}
+          alt={file.name}
+          width={24}
+          height={24}
         />
         <CloseButton />
       </div>
@@ -72,17 +74,15 @@ function FileWrap({
 
   function CloseButton() {
     return (
-        <button
-            className="absolute top-0 right-0 pl-1"
-            aria-label="Close"
-            onClick={() => onClick(file.name, file.lastModified)}
-        >
-          <Image src="/C-Close.svg" alt="Close icon" width={24} height={24} />
-        </button>
+      <button
+        className="absolute top-0 right-0 pl-1"
+        aria-label="Close"
+        onClick={() => onClick(file.name, file.lastModified)}
+      >
+        <Image src="/C-Close.svg" alt="Close icon" width={24} height={24} />
+      </button>
     );
   }
-
 }
-
 
 export default UploadedFileWraps;
