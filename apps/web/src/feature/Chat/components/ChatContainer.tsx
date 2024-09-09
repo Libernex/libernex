@@ -41,7 +41,9 @@ function ChatContainer(): JSX.Element {
       <aside className="hidden md:block w-56 shrink-0 border-r-2 border-gray-200 pt-16">
         <div
           className="flex justify-center"
-          onClick={() => router.push("/chat")}
+          onClick={() => {
+            router.push("/chat");
+          }}
         >
           <Image
             alt="L-LX Logo"
@@ -71,8 +73,8 @@ function ChatContainer(): JSX.Element {
         <div className="shrink-0 p-4 md:px-5 lg:px-1 xl:px-5">
           <div className="mx-auto md:max-w-3xl lg:max-w-[40rem] xl:max-w-[48rem]">
             <ChatForm
-              chatState={state}
               abortCurrentQuestion={abortCurrentQuestion}
+              chatState={state}
               sendQuestion={handleSendQuestion}
               setTemplateText={setTemplatePrompt}
               templatePrompt={templatePrompt}

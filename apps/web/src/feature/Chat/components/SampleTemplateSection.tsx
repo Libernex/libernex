@@ -8,11 +8,13 @@ function SampleTemplateSection({
   return (
     <div className="container mx-auto mt-24">
       <div className="flex justify-between">
-        {cardData.map((card, index) => (
+        {cardData.map((card) => (
           <Card
             description={card.description}
-            key={index}
-            onClick={() => setTemplateText(card.prompt)}
+            key={card.title}
+            onClick={() => {
+              setTemplateText(card.prompt);
+            }}
             src={card.src}
             title={card.title}
           />
@@ -36,6 +38,7 @@ function Card({
   return (
     <div className="flex flex-col my-2 group" onClick={onClick}>
       <img
+        alt="card"
         className="w-36 h-36 group-hover:hover-grow drop-shadow-xl"
         src={src}
       />

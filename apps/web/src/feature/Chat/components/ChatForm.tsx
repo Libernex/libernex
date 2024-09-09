@@ -130,10 +130,10 @@ function SubmitButton(): JSX.Element {
       type="submit"
     >
       <Image
-        alt={"Submit"}
+        alt="Submit"
         className="hover-grow w-3/4 h-auto"
         height={75}
-        src={"Submit-Arrow.svg"}
+        src="Submit-Arrow.svg"
         width={75}
       />
     </button>
@@ -149,10 +149,10 @@ function StopButton({ onClick }: { onClick: () => void }): JSX.Element {
       type="button"
     >
       <Image
-        alt={"Stop"}
+        alt="Stop"
         className="hover-grow w-4/5 h-auto"
         height={75}
-        src={"Stop-Button.svg"}
+        src="Stop-Button.svg"
         width={75}
       />
     </button>

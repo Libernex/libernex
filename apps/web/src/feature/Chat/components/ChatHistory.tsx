@@ -1,4 +1,4 @@
-import type { ChatInterface } from "../../../../../../packages/types/src";
+import type { ChatInterface } from "@repo/types/src/Chat";
 import ChatBubble from "@/feature/Chat/components/ChatBubble.tsx";
 
 interface ChatHistoryProps {
