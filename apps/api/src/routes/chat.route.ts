@@ -1,6 +1,8 @@
-import { Request, Response, Router } from "express";
-import { MessageInterface } from "@repo/types/src/Chat";
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
+import type { Request, Response } from "express";
+import { Router } from "express";
+import type { MessageInterface } from "@repo/types/src/Chat";
+import { LOGGER } from "@repo/logger";
 
 const router: Router = Router();
 const chunks = `
@@ -28,30 +30,31 @@ router.get("/question", async (req: Request, res: Response) => {
       "Cache-Control": "no-cache",
       Connection: "keep-alive",
     });
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    setTimeout(() => {}, 5000);
 
     res.write("event: connect\n");
     res.write(`data: ${JSON.stringify(connectMessage)} \n\n`);
 
-    let result: string = "";
+    let result = "";
     for (const chunk of chunks) {
-      result += chunk + " ";
+      result += `${chunk} `;
 
       const message = createMessage(
         { role: "assistance", name: "Libernex" },
-        { contentType: "text", body: chunk + " " },
+        { contentType: "text", body: `${chunk} ` },
       );
 
       res.write(`event: message\n`);
       res.write(`data: ${JSON.stringify(message)} \n\n`);
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      new Promise((resolve) => setTimeout(resolve, 100));
     }
 
     res.write(`event: message\n`);
     res.write(`data: ${JSON.stringify(endMessage)} \n\n`);
     res.end();
+    LOGGER(result);
   } catch (error) {
-    console.error("SSE 에러:", error);
+    LOGGER("SSE 에러:", error);
     res.write(`event: message\n`);
     res.write(`data: ${JSON.stringify(endMessage)} \n\n`);
     res.end();

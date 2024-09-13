@@ -1,7 +1,7 @@
 import express, { type Express, json, urlencoded } from "express";
 import morgan from "morgan";
 import cors from "cors";
-import ChatRoute from "./chat.route";
+import ChatRoute from "./routes/chat.route.ts";
 
 export const createServer = (): Express => {
   const app = express();
