@@ -1,10 +1,10 @@
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
 import { Chroma } from "@langchain/community/vectorstores/chroma";
+import ChromaDbProvider from "../providers/chroma-db.provider.ts";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { MultiQueryRetriever } from "langchain/retrievers/multi_query";
-import type { DocumentInterface } from "@langchain/core/documents";
-import ChromaDbProvider from "../providers/chroma-db.provider.ts";
+import { DocumentInterface } from "@langchain/core/documents";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
