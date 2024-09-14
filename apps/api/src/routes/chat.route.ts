@@ -5,6 +5,43 @@ import type { MessageInterface } from "@repo/types/src/Chat";
 import { LOGGER } from "@repo/logger";
 
 const router: Router = Router();
+
+// 기존 스레드가 있을 경우
+
+type Content = {
+  type: "text" | "file";
+  parts: string[];
+};
+router.post("/:thread/question", async (req: Request, res: Response) => {
+  const { thread } = req.params;
+  // const { content }: { content: Content } = req.body;
+
+  LOGGER(thread)
+  // LOGGER(content);
+  setEventStreamHeaders(res);
+
+  let idx = 0;
+  const result: Content = {
+    type: "text",
+    parts: [""]
+  }
+  const interval = setInterval(() => {
+    res.write(`data: ${JSON.stringify({ message: result })}\n\n`);
+    result.parts[result.parts.length-1] += chunks[idx] + " ";
+    idx++;
+    if (idx >= chunks.length){
+      clearInterval(interval);
+      res.end()
+    }
+  }, 100);
+
+
+  req.on("close", () => {
+    clearInterval(interval);
+    res.end();
+  });
+});
+
 const chunks = `
 군인 또는 군무원이 아닌 국민은 대한민국의 영역 안에서는 중대한 군사상 기밀·초병·초소·유독음식물공급·포로·군용물에 관한 죄 중 법률이 정한 경우와 비상계엄이 선포된 경우를 제외하고는 군사법원의 재판을 받지 아니한다.
 
@@ -25,11 +62,7 @@ router.get("/question", async (req: Request, res: Response) => {
   );
 
   try {
-    res.writeHead(200, {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      Connection: "keep-alive",
-    });
+    setEventStreamHeaders(res);
     setTimeout(() => {}, 5000);
 
     res.write("event: connect\n");
@@ -71,6 +104,12 @@ const createMessage = (
     content,
     sentAt: new Date().toLocaleString(),
   };
+};
+
+const setEventStreamHeaders = (res: Response): void => {
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  // res.setHeader("Connection", "keep-alive");
 };
 
 export default router;
