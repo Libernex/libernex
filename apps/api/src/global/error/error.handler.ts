@@ -9,6 +9,7 @@ const ErrorHandler = (
   next: NextFunction,
 ): void => {
   LOGGER(err.stack);
+  LOGGER(err.name);
 
   if (err instanceof HttpError) {
     res.status(err.httpCode).json({

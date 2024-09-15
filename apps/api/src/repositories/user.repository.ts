@@ -1,5 +1,6 @@
 import UserModel from "../models/user.schema.ts";
 import { TUser } from "@repo/types/src/User";
+import HttpError from "../global/error/http.error.ts";
 
 const UserRepository = (): TUserRepository => {
   const create = async (
@@ -21,9 +22,11 @@ const UserRepository = (): TUserRepository => {
   const findByUsernameWithPassword = async (
     username: string,
   ): Promise<TUser & { password: string }> => {
-    const user = await UserModel.findOne({ where: { username } });
+    const user = await UserModel.findOne({
+      username: username,
+    });
     if (!user) {
-      throw new Error("USER_NOT_FOUND");
+      throw new HttpError(404, "User Not Found");
     }
 
     return {
