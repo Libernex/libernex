@@ -102,7 +102,7 @@ const createMessage = (
 const setEventStreamHeaders = (res: Response): void => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
-  // res.setHeader("Connection", "keep-alive");
+  res.setHeader("Connection", "keep-alive");
 };
 
 export default router;
