@@ -5,48 +5,45 @@ import {
   RunnableSequence,
 } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
-import { LOGGER } from "@repo/logger";
 import LLMFactory, { LLMType } from "./LLM/llm-factory.ts";
 import DataIngestionService from "./DataIngestion/data-ingestion.service.ts";
 import { LoaderType } from "./DataIngestion/loaders/loader-factory.ts";
 import { SplitterType } from "./DataIngestion/splitters/splitter-factory.ts";
 import RetrieverService from "./Retriever/retriever.service.ts";
 
-class RAGService {}
+class RAGService {
+  async *askQuery({
+    query,
+    source,
+  }: {
+    query: string;
+    source: string;
+  }): AsyncGenerator<string> {
+    const retrievedDocs = await getRetrievedDocs(query, source);
+    const formatDocs = RetrieverService.joinDocumentContents(retrievedDocs);
 
-const RAGChain = async ({
-  query,
-  source,
-}: {
-  query: string;
-  source: string;
-}): Promise<string> => {
-  const retrievedDocs = await getRetrievedDocs(query, source);
-  const formatDocs = RetrieverService.joinDocumentContents(retrievedDocs);
+    const prompt = getPrompt();
+    const LLM = LLMFactory.createLLM(LLMType.OPENAI);
+    const outputParser = new StringOutputParser();
 
-  const prompt = getPrompt();
-  const LLM = LLMFactory.createLLM(LLMType.OPENAI);
-  const outputParser = new StringOutputParser();
+    const ragChain = RunnableSequence.from([
+      {
+        question: new RunnablePassthrough(),
+        context: new RunnablePassthrough(),
+      },
+      prompt,
+      LLM,
+      outputParser,
+    ]);
 
-  const ragChain = RunnableSequence.from([
-    {
-      question: new RunnablePassthrough(),
-      context: new RunnablePassthrough(),
-    },
-    prompt,
-    LLM,
-    outputParser,
-  ]);
-
-  let result = "";
-  const chunks = await ragChain.stream(formatDocs);
-  for await (const chunk of chunks) {
-    result += chunk;
-    LOGGER(result);
+    const chunks = await ragChain.stream(formatDocs);
+    for await (const chunk of chunks) {
+      yield chunk;
+    }
   }
+}
 
-  return result;
-};
+export default RAGService;
 
 const getRetrievedDocs = async (
   question: string,
@@ -95,5 +92,3 @@ const getPrompt = () => {
 
   return prompt;
 };
-
-export default RAGChain;

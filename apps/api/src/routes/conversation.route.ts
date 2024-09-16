@@ -4,6 +4,7 @@ import { Router } from "express";
 import type { MessageInterface } from "@repo/types/src/Chat";
 import { LOGGER } from "@repo/logger";
 import Lipsum from "../resources/sample-response.json";
+import RAGService from "../services/rag.service.ts";
 
 const router: Router = Router();
 
@@ -18,29 +19,32 @@ const chunks = Lipsum["Lipsum-KO"][0].split(/\s+/);
 
 router.post("/:thread/question", async (req: Request, res: Response) => {
   const { thread } = req.params;
-  // const { content }: { content: Content } = req.body;
+  const { query, source }: { query: string; source: string } = req.body;
 
-  LOGGER(thread);
+  LOGGER(`Thread: ${thread}, Query: ${query}, Source: ${source}`);
   setEventStreamHeaders(res);
 
-  let idx = 0;
-  const result: Content = {
-    type: "text",
-    parts: [""],
-  };
-  const interval = setInterval(() => {
-    res.write(`data: ${JSON.stringify({ message: result })}\n\n`);
-    result.parts[result.parts.length - 1] += chunks[idx] + " ";
-    idx++;
-    if (idx >= chunks.length) {
-      clearInterval(interval);
-      res.end();
+  const ragService = new RAGService();
+
+  try {
+    // AsyncGenerator를 사용하여 스트리밍
+    for await (const chunk of ragService.askQuery({ query, source })) {
+      res.write(
+        `data: ${JSON.stringify({ type: "chunk", content: chunk })}\n\n`,
+      );
+      LOGGER(`Chunk: ${chunk}`);
     }
-  }, 100);
+
+    res.write(`data: "[DONE]\n\n`);
+  } catch (error) {
+    LOGGER(`Error in RAGService: ${error}`);
+    res.write(`data: "[DONE]\n\n`);
+  } finally {
+    res.end();
+  }
 
   req.on("close", () => {
-    clearInterval(interval);
-    res.end();
+    LOGGER("Client disconnected");
   });
 });
 
