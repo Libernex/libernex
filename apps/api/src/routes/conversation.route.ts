@@ -17,7 +17,7 @@ type Content = {
 
 const chunks = Lipsum["Lipsum-KO"][0].split(/\s+/);
 
-router.post("/:thread/question", async (req: Request, res: Response) => {
+router.post("/:thread", async (req: Request, res: Response) => {
   const { thread } = req.params;
   const { query, source }: { query: string; source: string } = req.body;
 
@@ -28,9 +28,11 @@ router.post("/:thread/question", async (req: Request, res: Response) => {
 
   try {
     // AsyncGenerator를 사용하여 스트리밍
+    let result = "";
     for await (const chunk of ragService.askQuery({ query, source })) {
+      result += chunk;
       res.write(
-        `data: ${JSON.stringify({ type: "chunk", content: chunk })}\n\n`,
+        `data: ${JSON.stringify({ type: "chunk", content: result })}\n\n`,
       );
       LOGGER(`Chunk: ${chunk}`);
     }

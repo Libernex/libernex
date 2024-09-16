@@ -10,6 +10,7 @@ import DataIngestionService from "./DataIngestion/data-ingestion.service.ts";
 import { LoaderType } from "./DataIngestion/loaders/loader-factory.ts";
 import { SplitterType } from "./DataIngestion/splitters/splitter-factory.ts";
 import RetrieverService from "./Retriever/retriever.service.ts";
+import { LOGGER } from "@repo/logger";
 
 class RAGService {
   async *askQuery({
@@ -19,24 +20,28 @@ class RAGService {
     query: string;
     source: string;
   }): AsyncGenerator<string> {
+    const question = query;
+
     const retrievedDocs = await getRetrievedDocs(query, source);
     const formatDocs = RetrieverService.joinDocumentContents(retrievedDocs);
+    LOGGER(formatDocs);
 
     const prompt = getPrompt();
     const LLM = LLMFactory.createLLM(LLMType.OPENAI);
     const outputParser = new StringOutputParser();
 
     const ragChain = RunnableSequence.from([
-      {
-        question: new RunnablePassthrough(),
-        context: new RunnablePassthrough(),
-      },
+      new RunnablePassthrough(),
+      new RunnablePassthrough(),
       prompt,
       LLM,
       outputParser,
     ]);
 
-    const chunks = await ragChain.stream(formatDocs);
+    const chunks = await ragChain.stream({
+      question: query,
+      context: formatDocs,
+    });
     for await (const chunk of chunks) {
       yield chunk;
     }

@@ -5,7 +5,6 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 import ApiKeyConfig from "../../global/config/api-key.config.ts";
 import HttpError from "../../global/error/http.error.ts";
 import LLMFactory, { LLMType } from "../LLM/llm-factory.ts";
-import { LOGGER } from "@repo/logger";
 import { BaseLanguageModel } from "@langchain/core/language_models/base";
 
 class RetrieverService {
@@ -45,8 +44,6 @@ class RetrieverService {
     });
 
     const retrievedDocs = await retriever.invoke(query);
-    LOGGER(`Retrieved ${retrievedDocs.length} documents`);
-    LOGGER(retrievedDocs);
 
     return retrievedDocs;
   }
