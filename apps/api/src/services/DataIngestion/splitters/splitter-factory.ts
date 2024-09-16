@@ -6,8 +6,11 @@ import {
 import HttpError from "../../../global/error/http.error.ts";
 
 class SplitterFactory {
-  static createSplitter(type: SplitterType, config: TSplitterConfig = {}) {
-    const { chunkSize = 250, chunkOverlap = 25 } = config;
+  static createSplitter(
+    type: SplitterType,
+    config: TSplitterConfig = {},
+  ): RecursiveCharacterTextSplitter {
+    const { chunkSize = 350, chunkOverlap = 35 } = config;
 
     switch (type) {
       case SplitterType.RECURSIVE_CHARACTER:

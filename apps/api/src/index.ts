@@ -6,9 +6,9 @@ import * as mongoose from "mongoose";
 const port = process.env.PORT || 5050;
 const server = createServer();
 
-(async () => {
-  await RAGChain();
-})();
+// (async () => {
+//   await RAGChain();
+// })();
 
 mongoose
   .connect(process.env.MONGODB_URI as string)

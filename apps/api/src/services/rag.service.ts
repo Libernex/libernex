@@ -1,8 +1,7 @@
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
 import { Chroma } from "@langchain/community/vectorstores/chroma";
-import ChromaDbProvider from "../providers/chroma-db.provider.ts";
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { MultiQueryRetriever } from "langchain/retrievers/multi_query";
 import { DocumentInterface } from "@langchain/core/documents";
 import { PromptTemplate } from "@langchain/core/prompts";
@@ -12,6 +11,8 @@ import {
 } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { LOGGER } from "@repo/logger";
+import LLMFactory, { LLMType } from "./LLM/llm-factory.ts";
+import { ChromaClient } from "chromadb";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
@@ -66,9 +67,11 @@ const getRetrievedDocs = async (
     apiKey: OPENAI_API_KEY,
   });
 
-  const { client } = ChromaDbProvider();
+  const client = new ChromaClient({
+    path: "http://localhost:8080",
+  });
   const vectorDB = await Chroma.fromDocuments(splits, embeddings, {
-    index: client(),
+    index: client,
   });
 
   // retriever
@@ -115,10 +118,6 @@ const getPrompt = () => {
   return prompt;
 };
 
-const GPT_4O_MINI = new ChatOpenAI({
-  temperature: 0,
-  openAIApiKey: OPENAI_API_KEY,
-  model: "gpt-4o-mini",
-});
+const GPT_4O_MINI = LLMFactory.createLLM(LLMType.OPENAI);
 
 export default RAGChain;
