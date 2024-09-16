@@ -3,12 +3,13 @@ import type DataLoader from "./data-loader.interface.ts";
 import { LocalPdfLoader } from "./pdf-loader.ts";
 import { LocalDocxLoader } from "./docx-loader.ts";
 import { LocalNotionLoader, WebNotionLoader } from "./notion-loader.ts";
+import { WebLoader } from "./web-loader.ts";
 
 class LoaderFactory {
   static createLoader(type: LoaderType): DataLoader {
     switch (type) {
       case LoaderType.WEB:
-        return new LocalPdfLoader();
+        return new WebLoader();
       case LoaderType.PDF_LOCAL:
         return new LocalPdfLoader();
       case LoaderType.DOCX:

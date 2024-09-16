@@ -8,9 +8,9 @@ import HttpError from "../../../global/error/http.error.ts";
 class SplitterFactory {
   static createSplitter(
     type: SplitterType,
-    config: TSplitterConfig = {},
+    config?: TSplitterConfig,
   ): RecursiveCharacterTextSplitter {
-    const { chunkSize = 350, chunkOverlap = 35 } = config;
+    const { chunkSize = 350, chunkOverlap = 35 } = config || {};
 
     switch (type) {
       case SplitterType.RECURSIVE_CHARACTER:
@@ -34,7 +34,6 @@ export const SplitterType = {
   RECURSIVE_CHARACTER: "RecursiveCharacter",
   MARKDOWN: "Markdown",
 } as const;
-
 export type SplitterType = (typeof SplitterType)[keyof typeof SplitterType];
 
 export default SplitterFactory;

@@ -13,6 +13,9 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import { LOGGER } from "@repo/logger";
 import LLMFactory, { LLMType } from "./LLM/llm-factory.ts";
 import { ChromaClient } from "chromadb";
+import DataIngestionService from "./DataIngestion/data-ingestion.service.ts";
+import { LoaderType } from "./DataIngestion/loaders/loader-factory.ts";
+import { SplitterType } from "./DataIngestion/splitters/splitter-factory.ts";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
@@ -46,36 +49,20 @@ const RAGChain = async (): Promise<void> => {
 const getRetrievedDocs = async (
   question: string,
 ): Promise<DocumentInterface<Record<string, any>>[]> => {
-  // 데이터 불러오기
-  // 여기서는 웹
-  const loader: CheerioWebBaseLoader = new CheerioWebBaseLoader(
-    "https://n.news.naver.com/mnews/article/003/0012317114?sid=105",
-  );
-  const docs = await loader.load();
-  console.log(`docs len: ${docs.length}`);
-
-  // 텍스트 스플릿
-  const textSplitter: RecursiveCharacterTextSplitter =
-    new RecursiveCharacterTextSplitter({ chunkSize: 300, chunkOverlap: 0 });
-  const splits = await textSplitter.splitDocuments(docs);
-  console.log(`splits len: ${splits.length}`);
-
-  // VectorDB
-  const modelName = "jhgan/ko-sbert-nli";
-  const embeddings = new OpenAIEmbeddings({
-    model: "text-embedding-3-small",
-    apiKey: OPENAI_API_KEY,
-  });
-
-  const client = new ChromaClient({
-    path: "http://localhost:8080",
-  });
-  const vectorDB = await Chroma.fromDocuments(splits, embeddings, {
-    index: client,
+  const dataIngestionService = new DataIngestionService();
+  const vectorDB = await dataIngestionService.ingest({
+    loadOption: {
+      source: "https://n.news.naver.com/mnews/article/003/0012317114?sid=105",
+      type: LoaderType.WEB,
+    },
+    splitOption: {
+      type: SplitterType.RECURSIVE_CHARACTER,
+    },
+    storeOption: {},
   });
 
   // retriever
-  const LLM = GPT_4O_MINI;
+  const LLM = LLMFactory.createLLM(LLMType.OPENAI);
 
   const retrieverFromLLM = MultiQueryRetriever.fromLLM({
     retriever: vectorDB.asRetriever(),

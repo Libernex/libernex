@@ -12,24 +12,20 @@ import { Chroma } from "@langchain/community/vectorstores/chroma";
 class DataIngestionService {
   constructor() {}
 
-  async ingest(
-    loadOption: {
-      source: string;
-      type: LoaderType;
-      config?: TLoaderConfig;
-    },
-    splitOption: {
-      type: SplitterType;
-      config: TSplitterConfig;
-    },
-  ): Promise<Chroma> {
+  async ingest({
+    loadOption,
+    splitOption,
+    storeOption,
+  }: TIngestOptions): Promise<Chroma> {
     const loader: DataLoader = LoaderFactory.createLoader(loadOption.type);
     const document = await loader.load(loadOption.source, loadOption.config);
     LOGGER(`Load Document: ${loadOption.source}`);
+
     const splitter: RecursiveCharacterTextSplitter =
       SplitterFactory.createSplitter(splitOption.type);
     const splits = await splitter.invoke(document);
     LOGGER(`Split Document: ${splits.length}`);
+
     const embeddings = new OpenAIEmbeddings({
       model: "text-embedding-3-small",
       apiKey: ApiKeyConfig.OPENAI_API_KEY,
@@ -37,15 +33,31 @@ class DataIngestionService {
     LOGGER(`Embedding Chunks`);
 
     const client = new ChromaClient({
-      path: "http://localhost:8080",
+      path: "http://localhost:8000",
     });
     const vectorDB = await Chroma.fromDocuments(splits, embeddings, {
       index: client,
+      collectionName: storeOption.collectionName,
     });
     LOGGER("Store Document");
 
     return vectorDB;
   }
 }
+
+type TIngestOptions = {
+  loadOption: {
+    source: string;
+    type: LoaderType;
+    config?: TLoaderConfig;
+  };
+  splitOption: {
+    type: SplitterType;
+    config?: TSplitterConfig;
+  };
+  storeOption: {
+    collectionName?: string;
+  };
+};
 
 export default DataIngestionService;
