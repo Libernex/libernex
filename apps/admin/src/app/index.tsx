@@ -1,26 +1,20 @@
 import React from "react";
 import "./styles.css";
-import { CounterButton } from "@repo/ui/counter-button";
-import { Link } from "@repo/ui/link";
+import Sidebar from "../components/Sidebar";
+import MainContent from "../components/MainContent";
 
 function App(): JSX.Element {
   return (
-    <div className="container">
-      <h1 className="title">
-        Admin <br />
-        <span>Kitchen Sink</span>
-      </h1>
-      <CounterButton />
-      <p className="description">
-        Built With{" "}
-        <Link href="https://turbo.build/repo" newTab>
-          Turborepo
-        </Link>
-        {" & "}
-        <Link href="https://vitejs.dev/" newTab>
-          Vite
-        </Link>
-      </p>
+    <div
+      className="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden"
+      style={{ fontFamily: '"Work Sans", "Noto Sans", sans-serif' }}
+    >
+      <div className="layout-container flex h-full grow flex-col">
+        <div className="gap-1 px-6 flex flex-1 justify-center py-5">
+          <Sidebar />
+          <MainContent />
+        </div>
+      </div>
     </div>
   );
 }
