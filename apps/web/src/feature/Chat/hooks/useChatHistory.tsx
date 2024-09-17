@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { ChatInterface } from "@repo/types/src/";
 import { MessageInterface } from "@repo/types/src";
 import { LOGGER } from "@repo/logger";
+import { v4 } from "uuid";
 
 type ChatState = "idle" | "sending" | "receiving" | "error";
 
@@ -37,7 +38,7 @@ const useChatHistory = (): UseChatHistoryReturn => {
       setChatHistory((prevHistory) => [...prevHistory, question]);
 
       const answer: ChatInterface = {
-        id: window.crypto.randomUUID(),
+        id: v4(),
         sender: {
           role: "assistance",
           nickname: "Libernex",
@@ -91,7 +92,7 @@ const useChatHistory = (): UseChatHistoryReturn => {
                 const eventData = JSON.parse(line.slice(6));
                 const content = eventData.content.content;
                 const message: MessageInterface = {
-                  id: window.crypto.randomUUID(),
+                  id: v4(),
                   sentAt: new Date().toLocaleString(),
                   author: {
                     role: "assistance",

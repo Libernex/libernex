@@ -6,6 +6,7 @@ import type { ChatInterface, MessageInterface } from "@repo/types/src/Chat";
 import { useStageStore } from "@/feature/Chat/store/stageStore.tsx";
 import useFileUploads from "@/feature/Chat/hooks/useFileUploads.tsx";
 import UploadedFileWraps from "@/feature/Chat/components/UploadedFileWraps.tsx";
+import { v4 } from "uuid";
 
 interface ChatFormProps {
   templatePrompt: string;
@@ -43,11 +44,11 @@ function ChatForm({
     const messageDoc: MessageInterface = {
       author: { name: "lyght", role: "user" },
       content: { body: message, contentType: "text" },
-      id: window.crypto.randomUUID(),
+      id: v4(),
       sentAt: new Date().toLocaleString(),
     };
     const question: ChatInterface = {
-      id: window.crypto.randomUUID(),
+      id: v4(),
       sentAt: new Date().toLocaleString(),
       sender: {
         nickname: "lyght",

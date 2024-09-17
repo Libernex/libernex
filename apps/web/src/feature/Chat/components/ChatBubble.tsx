@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ChatInterface, MessageInterface } from "@repo/types/src/Chat";
 import starAvatarImage from "/public/Star-Avatar.webp";
+import ReactMarkdown from "react-markdown";
 
 interface ChatBubbleProps {
   chat: ChatInterface;
@@ -46,7 +47,7 @@ function ChatBubble({ chat }: ChatBubbleProps): JSX.Element {
         {chat.parts.length > 0 ? (
           <div className="flex flex-col w-full leading-1.5">
             <p className="text-lg font-normal py-2 text-gray-900">
-              {formatContentBody(getContentBody(chat))}
+              <ReactMarkdown>{getContentBody(chat)}</ReactMarkdown>
             </p>
             <span className="text-sm font-normal text-gray-500">
               {chat.sentAt}
