@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ArrowRight, ArrowDown, LucideIcon } from "lucide-react";
+import useUploadFile from "../hooks/useUploadFile.tsx";
 
 type TUploadOptionProps = {
   icon: LucideIcon;
@@ -19,35 +20,53 @@ const UploadOption = ({
   const [fileName, setFileName] = useState<string | null>(null);
   const [fileType, setFileType] = useState<"PDF" | "DOCX" | null>(null);
   const [linkUrl, setLinkUrl] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+
+  const { uploadFile, uploadLink, isLoading, error } = useUploadFile();
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      if (file.type === "application/pdf") {
-        setFileName(file.name);
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      if (selectedFile.type === "application/pdf") {
+        setFileName(selectedFile.name);
         setFileType("PDF");
-      } else if (file.type === "application/haansoftdocx") {
-        setFileName(file.name);
+        setFile(selectedFile);
+      } else if (selectedFile.type === "application/haansoftdocx") {
+        setFileName(selectedFile.name);
         setFileType("DOCX");
+        setFile(selectedFile);
       } else {
         alert("Only PDF and DOCX files are allowed.");
         event.target.value = "";
         setFileName(null);
         setFileType(null);
+        setFile(null);
       }
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (label === "FILE" && fileName) {
-      console.log("Submitting file:", fileName);
-      // Add your file submission logic here
+    if (label === "FILE" && file) {
+      const success = await uploadFile(file);
+      if (success) {
+        console.log("File uploaded and embedded successfully");
+        // 추가적인 성공 처리 로직
+      } else {
+        console.log("File upload or embedding failed");
+        // 추가적인 실패 처리 로직
+      }
     } else if (label === "LINK" && linkUrl) {
-      console.log("Submitting link:", linkUrl);
-      // Add your link submission logic here
+      const success = await uploadLink(linkUrl);
+      if (success) {
+        console.log("Link embedded successfully");
+        // 추가적인 성공 처리 로직
+      } else {
+        console.log("Link embedding failed");
+        // 추가적인 실패 처리 로직
+      }
     }
   };
 
@@ -122,9 +141,11 @@ const UploadOption = ({
           <button
             type="submit"
             className="mt-4 bg-gray-100 text-gray-700 py-2 px-4 rounded hover:bg-gray-200 transition duration-300 border border-gray-300"
+            disabled={isLoading}
           >
-            Submit
+            {isLoading ? "Uploading..." : "Submit"}
           </button>
+          {error && <p className="mt-2 text-red-500 text-sm">{error}</p>}
         </form>
       )}
     </div>
