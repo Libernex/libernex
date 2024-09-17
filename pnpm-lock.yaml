@@ -74,7 +74,7 @@ importers:
         version: 0.3.1(@langchain/core@0.2.33(openai@4.61.1(zod@3.23.8)))
       '@langchain/community':
         specifier: ^0.2.33
-        version: 0.2.33(@huggingface/inference@2.8.0)(@langchain/anthropic@0.3.1(@langchain/core@0.2.33(openai@4.61.1(zod@3.23.8))))(@notionhq/client@2.2.15)(@xenova/transformers@2.17.2)(axios@1.7.7)(cheerio@1.0.0)(chromadb@1.8.1(@google/generative-ai@0.19.0)(openai@4.61.1(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(jsdom@20.0.3)(lodash@4.17.21)(mongodb@6.8.0)(notion-to-md@3.1.1)(openai@4.61.1(zod@3.23.8))(ws@8.18.0)
+        version: 0.2.33(@huggingface/inference@2.8.0)(@langchain/anthropic@0.3.1(@langchain/core@0.2.33(openai@4.61.1(zod@3.23.8))))(@notionhq/client@2.2.15)(@xenova/transformers@2.17.2)(axios@1.7.7)(cheerio@1.0.0)(chromadb@1.8.1(@google/generative-ai@0.19.0)(openai@4.61.1(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(jsdom@20.0.3)(lodash@4.17.21)(mongodb@6.8.0)(notion-to-md@3.1.1)(openai@4.61.1(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0)
       '@langchain/core':
         specifier: ^0.2.32
         version: 0.2.33(openai@4.61.1(zod@3.23.8))
@@ -119,7 +119,7 @@ importers:
         version: 1.18.0
       langchain:
         specifier: ^0.2.19
-        version: 0.2.20(@langchain/anthropic@0.3.1(@langchain/core@0.2.33(openai@4.61.1(zod@3.23.8))))(@notionhq/client@2.2.15)(axios@1.7.7)(cheerio@1.0.0)(chromadb@1.8.1(@google/generative-ai@0.19.0)(openai@4.61.1(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(jsdom@20.0.3)(mongodb@6.8.0)(notion-to-md@3.1.1)(openai@4.61.1(zod@3.23.8))(ws@8.18.0)
+        version: 0.2.20(@langchain/anthropic@0.3.1(@langchain/core@0.2.33(openai@4.61.1(zod@3.23.8))))(@notionhq/client@2.2.15)(axios@1.7.7)(cheerio@1.0.0)(chromadb@1.8.1(@google/generative-ai@0.19.0)(openai@4.61.1(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(jsdom@20.0.3)(mongodb@6.8.0)(notion-to-md@3.1.1)(openai@4.61.1(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0)
       mongoose:
         specifier: ^8.6.2
         version: 8.6.2
@@ -135,6 +135,12 @@ importers:
       openai:
         specifier: ^4.58.2
         version: 4.61.1(zod@3.23.8)
+      pdf-parse:
+        specifier: ^1.1.1
+        version: 1.1.1
+      uuid:
+        specifier: ^10.0.0
+        version: 10.0.0
     devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
@@ -175,6 +181,9 @@ importers:
       '@types/supertest':
         specifier: ^6.0.2
         version: 6.0.2
+      '@types/uuid':
+        specifier: ^10.0.0
+        version: 10.0.0
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.16.5)
@@ -4491,6 +4500,9 @@ packages:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
 
+  node-ensure@0.0.0:
+    resolution: {integrity: sha512-DRI60hzo2oKN1ma0ckc6nQWlHU69RH6xN0sjQTjMpChPfTYvKZdcQFfdYK2RWbJcKyUizSIy/l8OTGxMAM1QDw==}
+
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
@@ -4739,6 +4751,10 @@ packages:
   path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
+
+  pdf-parse@1.1.1:
+    resolution: {integrity: sha512-v6ZJ/efsBpGrGGknjtq9J/oC8tZWq0KWL5vQrk2GlzLEQPUDB1ex+13Rmidl1neNN358Jn9EHZw5y07FFtaC7A==}
+    engines: {node: '>=6.8.1'}
 
   picocolors@1.1.0:
     resolution: {integrity: sha512-TQ92mBOW0l3LeMeyLV6mzy/kWr8lkd/hp3mTg7wYK7zJhuBStmGMBG0BdeDZS/dZx1IukaX6Bk11zcln25o1Aw==}
@@ -6613,7 +6629,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@langchain/community@0.2.33(@huggingface/inference@2.8.0)(@langchain/anthropic@0.3.1(@langchain/core@0.2.33(openai@4.61.1(zod@3.23.8))))(@notionhq/client@2.2.15)(@xenova/transformers@2.17.2)(axios@1.7.7)(cheerio@1.0.0)(chromadb@1.8.1(@google/generative-ai@0.19.0)(openai@4.61.1(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(jsdom@20.0.3)(lodash@4.17.21)(mongodb@6.8.0)(notion-to-md@3.1.1)(openai@4.61.1(zod@3.23.8))(ws@8.18.0)':
+  '@langchain/community@0.2.33(@huggingface/inference@2.8.0)(@langchain/anthropic@0.3.1(@langchain/core@0.2.33(openai@4.61.1(zod@3.23.8))))(@notionhq/client@2.2.15)(@xenova/transformers@2.17.2)(axios@1.7.7)(cheerio@1.0.0)(chromadb@1.8.1(@google/generative-ai@0.19.0)(openai@4.61.1(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(jsdom@20.0.3)(lodash@4.17.21)(mongodb@6.8.0)(notion-to-md@3.1.1)(openai@4.61.1(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0)':
     dependencies:
       '@langchain/core': 0.2.33(openai@4.61.1(zod@3.23.8))
       '@langchain/openai': 0.2.11
@@ -6621,7 +6637,7 @@ snapshots:
       expr-eval: 2.0.2
       flat: 5.0.2
       js-yaml: 4.1.0
-      langchain: 0.2.20(@langchain/anthropic@0.3.1(@langchain/core@0.2.33(openai@4.61.1(zod@3.23.8))))(@notionhq/client@2.2.15)(axios@1.7.7)(cheerio@1.0.0)(chromadb@1.8.1(@google/generative-ai@0.19.0)(openai@4.61.1(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(jsdom@20.0.3)(mongodb@6.8.0)(notion-to-md@3.1.1)(openai@4.61.1(zod@3.23.8))(ws@8.18.0)
+      langchain: 0.2.20(@langchain/anthropic@0.3.1(@langchain/core@0.2.33(openai@4.61.1(zod@3.23.8))))(@notionhq/client@2.2.15)(axios@1.7.7)(cheerio@1.0.0)(chromadb@1.8.1(@google/generative-ai@0.19.0)(openai@4.61.1(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(jsdom@20.0.3)(mongodb@6.8.0)(notion-to-md@3.1.1)(openai@4.61.1(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0)
       langsmith: 0.1.56(openai@4.61.1(zod@3.23.8))
       uuid: 10.0.0
       zod: 3.23.8
@@ -6637,6 +6653,7 @@ snapshots:
       lodash: 4.17.21
       mongodb: 6.8.0
       notion-to-md: 3.1.1
+      pdf-parse: 1.1.1
       ws: 8.18.0
     transitivePeerDependencies:
       - '@gomomento/sdk-web'
@@ -9770,7 +9787,7 @@ snapshots:
 
   kleur@4.1.5: {}
 
-  langchain@0.2.20(@langchain/anthropic@0.3.1(@langchain/core@0.2.33(openai@4.61.1(zod@3.23.8))))(@notionhq/client@2.2.15)(axios@1.7.7)(cheerio@1.0.0)(chromadb@1.8.1(@google/generative-ai@0.19.0)(openai@4.61.1(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(jsdom@20.0.3)(mongodb@6.8.0)(notion-to-md@3.1.1)(openai@4.61.1(zod@3.23.8))(ws@8.18.0):
+  langchain@0.2.20(@langchain/anthropic@0.3.1(@langchain/core@0.2.33(openai@4.61.1(zod@3.23.8))))(@notionhq/client@2.2.15)(axios@1.7.7)(cheerio@1.0.0)(chromadb@1.8.1(@google/generative-ai@0.19.0)(openai@4.61.1(zod@3.23.8)))(fast-xml-parser@4.5.0)(ignore@5.3.2)(jsdom@20.0.3)(mongodb@6.8.0)(notion-to-md@3.1.1)(openai@4.61.1(zod@3.23.8))(pdf-parse@1.1.1)(ws@8.18.0):
     dependencies:
       '@langchain/core': 0.2.33(openai@4.61.1(zod@3.23.8))
       '@langchain/openai': 0.2.11
@@ -9797,6 +9814,7 @@ snapshots:
       jsdom: 20.0.3
       mongodb: 6.8.0
       notion-to-md: 3.1.1
+      pdf-parse: 1.1.1
       ws: 8.18.0
     transitivePeerDependencies:
       - encoding
@@ -10394,6 +10412,8 @@ snapshots:
 
   node-domexception@1.0.0: {}
 
+  node-ensure@0.0.0: {}
+
   node-fetch@2.7.0:
     dependencies:
       whatwg-url: 5.0.0
@@ -10676,6 +10696,13 @@ snapshots:
   path-to-regexp@0.1.10: {}
 
   path-type@4.0.0: {}
+
+  pdf-parse@1.1.1:
+    dependencies:
+      debug: 3.2.7
+      node-ensure: 0.0.0
+    transitivePeerDependencies:
+      - supports-color
 
   picocolors@1.1.0: {}
 

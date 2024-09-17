@@ -8,6 +8,8 @@ import ConversationRoute from "./routes/conversation.route.ts";
 import ThreadRoute from "./routes/thread.route.ts";
 import ErrorHandler from "./global/error/error.handler.ts";
 import UserRoute from "./routes/user.route.ts";
+import FileRoute from "./routes/file.route.ts";
+import EmbedingRoute from "./routes/embedding.route.ts";
 
 dotenv.config({ debug: true });
 
@@ -36,6 +38,8 @@ const addRoutes = (app: Express): void => {
   app.use("/users", UserRoute);
   app.use("/conversation", ConversationRoute);
   app.use("/threads", ThreadRoute);
+  app.use("/file", FileRoute);
+  app.use("/embedding", EmbedingRoute);
 };
 
 const sessionInstance = session({
