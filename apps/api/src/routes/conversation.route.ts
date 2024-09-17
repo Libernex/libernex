@@ -34,13 +34,13 @@ router.post("/:thread", async (req: Request, res: Response) => {
       res.write(
         `data: ${JSON.stringify({ type: "chunk", content: result })}\n\n`,
       );
-      LOGGER(`Chunk: ${chunk}`);
+      // LOGGER(`Chunk: ${chunk}`);
     }
 
-    res.write(`data: "[DONE]\n\n`);
+    res.write(`data: [DONE]\n\n`);
   } catch (error) {
     LOGGER(`Error in RAGService: ${error}`);
-    res.write(`data: "[DONE]\n\n`);
+    res.write(`data: [DONE]\n\n`);
   } finally {
     res.end();
   }

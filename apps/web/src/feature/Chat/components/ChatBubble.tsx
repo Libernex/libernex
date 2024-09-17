@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { ChatInterface } from "@repo/types/src/Chat";
+import type { ChatInterface, MessageInterface } from "@repo/types/src/Chat";
 import starAvatarImage from "/public/Star-Avatar.webp";
 
 interface ChatBubbleProps {
@@ -8,6 +8,24 @@ interface ChatBubbleProps {
 
 const combineChatParts = (chat: ChatInterface): string => {
   return chat.parts.map((part) => part.content.body).join("");
+};
+
+// 줄바꿈 문자를 <br> 태그로 변환하는 함수
+const formatContentBody = (body: string): JSX.Element[] => {
+  return body.split("\n").map((line, index) => (
+    <span key={index}>
+      {line}
+      <br />
+    </span>
+  ));
+};
+
+const getContentBody = (chat: ChatInterface): string => {
+  const message: MessageInterface = chat.parts[0];
+  if (!message.content) {
+    return "";
+  }
+  return message.content.body;
 };
 
 function ChatBubble({ chat }: ChatBubbleProps): JSX.Element {
@@ -28,7 +46,7 @@ function ChatBubble({ chat }: ChatBubbleProps): JSX.Element {
         {chat.parts.length > 0 ? (
           <div className="flex flex-col w-full leading-1.5">
             <p className="text-lg font-normal py-2 text-gray-900">
-              {combineChatParts(chat)}
+              {formatContentBody(getContentBody(chat))}
             </p>
             <span className="text-sm font-normal text-gray-500">
               {chat.sentAt}

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { ChatInterface } from "../../../../../../packages/types/src";
-import { MessageInterface } from "../../../../../../packages/types/src";
+import type { ChatInterface } from "@repo/types/src/";
+import { MessageInterface } from "@repo/types/src";
+import { LOGGER } from "@repo/logger";
 
 type ChatState = "idle" | "sending" | "receiving" | "error";
 
@@ -15,14 +16,9 @@ const useChatHistory = (): UseChatHistoryReturn => {
   const [chatHistory, setChatHistory] = useState<ChatInterface[]>([]);
   const [state, setState] = useState<ChatState>("idle");
   const currentAnswerRef = useRef<ChatInterface | null>(null);
-  const eventSourceRef = useRef<EventSource | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  const cleanupEventSource = useCallback((): void => {
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close();
-      eventSourceRef.current = null;
-    }
+  const cleanupRequest = useCallback((): void => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
@@ -32,8 +28,8 @@ const useChatHistory = (): UseChatHistoryReturn => {
 
   const abortCurrentQuestion = useCallback((): void => {
     setState("idle");
-    cleanupEventSource();
-  }, [cleanupEventSource]);
+    cleanupRequest();
+  }, [cleanupRequest]);
 
   const sendQuestion = useCallback(
     async (question: ChatInterface): Promise<void> => {
@@ -51,53 +47,91 @@ const useChatHistory = (): UseChatHistoryReturn => {
         sentAt: new Date().toLocaleString(),
       };
 
-      cleanupEventSource();
+      cleanupRequest();
 
       abortControllerRef.current = new AbortController();
       const signal = abortControllerRef.current.signal;
 
-      const query = JSON.stringify(question);
-      eventSourceRef.current = new EventSource(`/api/chat/question?${query}`);
-
       setChatHistory((prevHistory) => [...prevHistory, answer]);
       currentAnswerRef.current = answer;
 
-      eventSourceRef.current.addEventListener("connect", (event): void => {
-        const message: MessageInterface = JSON.parse(event.data);
-        if (currentAnswerRef.current) {
-          currentAnswerRef.current.id = message.content.body;
-          setChatHistory((prevHistory) => [...prevHistory]);
+      try {
+        const response = await fetch(`/api/conversation/123`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "text/event-stream",
+          },
+          body: JSON.stringify({ query: question.parts[0].content.body }),
+          signal: signal,
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      });
-
-      eventSourceRef.current.addEventListener("message", (event): void => {
-        setState("receiving");
-        const message: MessageInterface = JSON.parse(event.data);
-        if (currentAnswerRef.current) {
-          currentAnswerRef.current.parts.push(message);
-          setChatHistory((prevHistory) => [...prevHistory]);
+        if (!response.body) {
+          throw new Error("Response body is undefined");
         }
-      });
 
-      eventSourceRef.current.onerror = (error: Event): void => {
-        setState("error");
-        cleanupEventSource();
-      };
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
 
-      signal.addEventListener("abort", (): void => {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split("\n");
+
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              if (line.trim() === "data: [DONE]") {
+                continue;
+              }
+              try {
+                const eventData = JSON.parse(line.slice(6));
+                const content = eventData.content.content;
+                const message: MessageInterface = {
+                  id: window.crypto.randomUUID(),
+                  sentAt: new Date().toLocaleString(),
+                  author: {
+                    role: "assistance",
+                    name: "libernex",
+                  },
+                  content: {
+                    contentType: "text",
+                    body: content,
+                  },
+                };
+                if (currentAnswerRef.current) {
+                  const lastIndex = currentAnswerRef.current.parts.length - 1;
+                  if (lastIndex >= 0) {
+                    currentAnswerRef.current.parts[lastIndex] = message;
+                  } else {
+                    currentAnswerRef.current.parts[0] = message;
+                  }
+                  setChatHistory((prevHistory) => [...prevHistory]);
+                }
+              } catch (error) {
+                LOGGER("Error parsing chunk:", error);
+              }
+            }
+          }
+        }
+
         setState("idle");
-        cleanupEventSource();
-      });
+      } catch (error) {
+        LOGGER(error);
+      }
     },
-    [cleanupEventSource],
+    [cleanupRequest],
   );
 
   useEffect(() => {
     return (): void => {
-      cleanupEventSource();
+      cleanupRequest();
       setState("idle");
     };
-  }, [cleanupEventSource]);
+  }, [cleanupRequest]);
 
   return {
     chatHistory,
