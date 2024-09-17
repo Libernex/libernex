@@ -11,7 +11,7 @@ const MainContent = (): JSX.Element => {
       <Header />
       <TabNavigation />
       <UploadSection />
-      <LinkSection />
+      {/*<LinkSection />*/}
     </div>
   );
 };
