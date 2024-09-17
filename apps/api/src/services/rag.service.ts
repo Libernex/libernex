@@ -52,24 +52,32 @@ export default RAGService;
 
 const getRetrievedDocs = async (
   question: string,
-  source: string,
+  source?: string,
 ): Promise<DocumentInterface<Record<string, any>>[]> => {
   const dataIngestionService = new DataIngestionService();
-  const vectorDB = await dataIngestionService.ingest({
-    loadOption: {
-      source,
-      type: LoaderType.WEB,
-    },
-    splitOption: {
-      type: SplitterType.RECURSIVE_CHARACTER,
-    },
-    storeOption: {},
-  });
-
   const retrieverService = new RetrieverService();
+
+  let vectorDB;
+  if (source) {
+    vectorDB = await dataIngestionService.ingest({
+      loadOption: {
+        source,
+        type: LoaderType.WEB,
+      },
+      splitOption: {
+        type: SplitterType.RECURSIVE_CHARACTER,
+      },
+      storeOption: {
+        collectionName: "default",
+      },
+    });
+  }
+
+  LOGGER(question, source);
   const retrievedDocs = await retrieverService.retrieveDocuments({
     query: question,
     vectorDB,
+    collectionName: "default",
   });
 
   return retrievedDocs;
