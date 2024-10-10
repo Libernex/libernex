@@ -1,4 +1,4 @@
-"use client"; // Next.js에서 클라이언트 측 코드임을 명시
+'use client';
 
 import { EditorState } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
@@ -10,13 +10,13 @@ import { useEffect, useRef } from "react";
 
 const ProseMirrorEditor = (): JSX.Element => {
   const editorRef = useRef<HTMLDivElement | null>(null);
-  
+
   const mySchema = new Schema({
     nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
     marks: schema.spec.marks,
   });
   const doc = DOMParser.fromSchema(mySchema).parse(document.createElement("div"));
-  const plugins = exampleSetup({ schema: mySchema });
+  const plugins = exampleSetup({ schema: mySchema, menuBar: false });
 
   useEffect(() => {
     if (!editorRef.current) return;
@@ -36,3 +36,4 @@ const ProseMirrorEditor = (): JSX.Element => {
 }
 
 export default ProseMirrorEditor;
+

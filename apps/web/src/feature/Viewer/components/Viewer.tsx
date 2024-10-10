@@ -1,12 +1,10 @@
-'use client';
+import dynamic from 'next/dynamic';
 
-import React from 'react';
-import ProseMirrorEditor from './ProseMirror/ProseMirrorEditor';
+const ProseMirrorEditor = dynamic(() => import('./ProseMirror/ProseMirrorEditor'), { ssr: false });
 
 const Viewer= (): JSX.Element => {
-
   return (
-    <div>
+    <div className="flex flex-col h-screen">
       <h1>ProseMirror Viewer</h1>
       <ProseMirrorEditor />
     </div>
