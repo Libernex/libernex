@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ChatLayout({
+export default function ViewLayout({
   children,
 }: {
   children: React.ReactNode;
