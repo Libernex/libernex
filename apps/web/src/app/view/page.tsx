@@ -1,5 +1,5 @@
-import Viewer from "@/feature/Viewer/components/Viewer";
+import TipTap from "@/feature/Viewer/components/TipTap.tsx";
 
 export default function ViewPage(): JSX.Element {
-  return <Viewer />;
+  return <TipTap />
 }

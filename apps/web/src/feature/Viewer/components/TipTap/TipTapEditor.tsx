@@ -1,38 +1,59 @@
-'use client'
-import styles from './TipTap.module.scss'
+// components/TipTapEditor.tsx
 
-import { useEditor, EditorContent } from '@tiptap/react'
-import { StarterKit } from '@tiptap/starter-kit'
-import { all, createLowlight } from 'lowlight'
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import React, { useEffect } from 'react';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Code from '@tiptap/extension-code';
+import {CodeBlock} from '@tiptap/extension-code-block';
 
-import css from 'highlight.js/lib/languages/css'
-import js from 'highlight.js/lib/languages/javascript'
-import ts from 'highlight.js/lib/languages/typescript'
-import html from 'highlight.js/lib/languages/xml'
+import style from './TipTap.module.scss';
+import {Link} from "@tiptap/extension-link";
 
-const lowlight = createLowlight(all);
-lowlight.register('html', html)
-lowlight.register('css', css)
-lowlight.register('js', js)
-lowlight.register('ts', ts)
+type TipTapEditorProps = {
+    initialContent: string;
+    onChangeContent: (content: string) => void;
+    editable?: boolean;
+};
 
-const TipTapEditor = () => {
-  const editor = useEditor({
-    extensions: [
-        StarterKit,
-        CodeBlockLowlight.configure({
-            lowlight,
-          }),
-    ],
-    content: '<p>Hello World! 🌎️</p>',
-  })
+const TipTapEditor = ({ initialContent, onChangeContent, editable = true }: TipTapEditorProps) => {
+    const editor = useEditor({
+        content: initialContent,
+        extensions: [
+            StarterKit,
+            Code.configure({
+                HTMLAttributes: {
+                    class: style['inline-code'],  // SCSS 클래스 적용
+                },
+            }),
+            CodeBlock.configure({
+                HTMLAttributes: {
+                    class: style['code-block'],  // SCSS 클래스 적용
+                },
+            }),
+            Link.configure({
+                openOnClick: false, // 링크를 클릭할 때 새 탭에서 열리지 않도록 설정
+                linkOnPaste: true, // 링크를 붙여넣으면 자동으로 링크 인식
+            }),
+        ],
+        editable: editable,
+        onUpdate({ editor }) {
+            const contentHTML = editor.getHTML();
+            onChangeContent(contentHTML);
+        },
+    });
 
-  return (
-    <div className={`${styles.tiptap} prose focus:outline-none`}>
-      <EditorContent editor={editor} />
-    </div>
-  )
-}
+    // Cleanup editor on component unmount
+    useEffect(() => {
+        return () => {
+            editor?.destroy();
+        };
+    }, [editor]);
 
-export default TipTapEditor
+    return (
+        <div className="prose max-w-none mb-4">
+            <EditorContent editor={editor} />
+        </div>
+    );
+};
+
+export default TipTapEditor;

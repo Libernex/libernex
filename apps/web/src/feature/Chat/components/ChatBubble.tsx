@@ -2,24 +2,11 @@ import Image from "next/image";
 import type { ChatInterface, MessageInterface } from "@repo/types/src/Chat";
 import starAvatarImage from "/public/Star-Avatar.webp";
 import ReactMarkdown from "react-markdown";
+import TipTapEditor from "@/feature/Viewer/components/TipTap/TipTapEditor.tsx";
 
 interface ChatBubbleProps {
   chat: ChatInterface;
 }
-
-const combineChatParts = (chat: ChatInterface): string => {
-  return chat.parts.map((part) => part.content.body).join("");
-};
-
-// 줄바꿈 문자를 <br> 태그로 변환하는 함수
-const formatContentBody = (body: string): JSX.Element[] => {
-  return body.split("\n").map((line, index) => (
-    <span key={index}>
-      {line}
-      <br />
-    </span>
-  ));
-};
 
 const getContentBody = (chat: ChatInterface): string => {
   const message: MessageInterface = chat.parts[0];
@@ -47,6 +34,7 @@ function ChatBubble({ chat }: ChatBubbleProps): JSX.Element {
         {chat.parts.length > 0 ? (
           <div className="flex flex-col w-full leading-1.5">
             <p className="text-lg font-normal py-2 text-gray-900">
+              {/*<TipTapEditor initialContent={getContentBody(chat)} editable={false}/>*/}
               <ReactMarkdown>{getContentBody(chat)}</ReactMarkdown>
             </p>
             <span className="text-sm font-normal text-gray-500">

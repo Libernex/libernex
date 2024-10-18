@@ -1,12 +1,13 @@
-import TipTapEditor from "./TipTap/TipTapEditor";
+import React from 'react';
 
-const Viewer= (): JSX.Element => {
-  return (
-    <div className="flex flex-col h-screen">
-      <h1>ProseMirror Viewer</h1>
-      <TipTapEditor />
-    </div>
-  );
+type ViewerProps = {
+    content: string;
+};
+
+const Viewer = ({ content }: ViewerProps) => {
+    return (
+        <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: content }} />
+    );
 };
 
 export default Viewer;

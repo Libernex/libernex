@@ -80,4 +80,23 @@
         content: none;
       }
 }
-  
+
+
+.inline-code {
+    background-color: #f0f0f0;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+
+    &::before,
+    &::after {
+        content: none !important;
+    }
+}
+
+.code-block {
+    background-color: #f0f0f0;
+    color: black;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+}

@@ -17,40 +17,40 @@ type Content = {
 
 const chunks = Lipsum["Lipsum-KO"][0].split(/\s+/);
 
-router.post("/:thread", async (req: Request, res: Response) => {
-  const { thread } = req.params;
-  const { query, source }: { query: string; source: string } = req.body;
+// router.post("/:thread", async (req: Request, res: Response) => {
+//   const { thread } = req.params;
+//   const { query, source }: { query: string; source: string } = req.body;
+//
+//   LOGGER(`Thread: ${thread}, Query: ${query}, Source: ${source}`);
+//   setEventStreamHeaders(res);
+//
+//   const ragService = new RAGService();
+//
+//   try {
+//     // AsyncGenerator를 사용하여 스트리밍
+//     let result = "";
+//     for await (const chunk of ragService.askQuery({ query, source })) {
+//       result += chunk;
+//       res.write(
+//         `data: ${JSON.stringify({ type: "chunk", content: result })}\n\n`,
+//       );
+//       // LOGGER(`Chunk: ${chunk}`);
+//     }
+//
+//     res.write(`data: [DONE]\n\n`);
+//   } catch (error) {
+//     LOGGER(`Error in RAGService: ${error}`);
+//     res.write(`data: [DONE]\n\n`);
+//   } finally {
+//     res.end();
+//   }
+//
+//   req.on("close", () => {
+//     LOGGER("Client disconnected");
+//   });
+// });
 
-  LOGGER(`Thread: ${thread}, Query: ${query}, Source: ${source}`);
-  setEventStreamHeaders(res);
-
-  const ragService = new RAGService();
-
-  try {
-    // AsyncGenerator를 사용하여 스트리밍
-    let result = "";
-    for await (const chunk of ragService.askQuery({ query, source })) {
-      result += chunk;
-      res.write(
-        `data: ${JSON.stringify({ type: "chunk", content: result })}\n\n`,
-      );
-      // LOGGER(`Chunk: ${chunk}`);
-    }
-
-    res.write(`data: [DONE]\n\n`);
-  } catch (error) {
-    LOGGER(`Error in RAGService: ${error}`);
-    res.write(`data: [DONE]\n\n`);
-  } finally {
-    res.end();
-  }
-
-  req.on("close", () => {
-    LOGGER("Client disconnected");
-  });
-});
-
-router.get("/question", async (req: Request, res: Response) => {
+router.get("/123", async (req: Request, res: Response) => {
   const endMessage = createMessage(
     { role: "assistance", name: "Libernex" },
     { contentType: "text", body: "DONE" },
